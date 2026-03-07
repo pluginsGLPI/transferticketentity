@@ -70,7 +70,7 @@
     resize: none;
 }
 
-.tt_modal textarea:focus { 
+.tt_modal textarea:focus {
     outline: none !important;
     border-color: #719ECE;
     box-shadow: 0 0 10px #719ECE;
@@ -84,34 +84,6 @@
     gap: 0.25rem;
 }
 
-#canceltransfert {
-    display:inline-flex;
-    align-items: center;
-    justify-content: center;
-    white-space: nowrap;
-    background-color: #f00020;
-    color: white;
-    border: 1px solid rgba(98, 105, 118, 0.24);
-    border-radius: 4px;
-    font-weight: 500;
-    line-height: 1.4285714286;
-    padding: 0.4375rem 2rem;
-    margin-right:1rem;
-}
-
-#transfertticket {
-    display:inline-flex;
-    align-items: center;
-    justify-content: center;
-    white-space: nowrap;
-    background-color: #80cead;
-    color: #1e293b;
-    border: 1px solid rgba(98, 105, 118, 0.24);
-    border-radius: 4px;
-    font-weight: 500;
-    line-height: 1.4285714286;
-    padding: 0.4375rem 2rem;
-}
 
 #tt_modal_form_adder .justification {
     padding-bottom:1rem;
@@ -135,20 +107,4 @@
 
 .adv-msg {
     color: #800000;
-}
-
-/*--------------------------------------- profile.class.php -------------------------------------------*/
-
-.tt_profile_border-top {
-    background:var(--tblr-border-color-light);
-}
-
-.tt_profile_border-top h4 {
-    line-height:1.4285714286;
-    font-size:0.875rem;
-    color:#626976;
-}
-
-.tt_profile_tab_bg_2 {
-    width:40%;
 }

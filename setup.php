@@ -31,14 +31,23 @@
 
 define('TRANSFERTICKETENTITY_VERSION', '1.1.3');
 
+if (!defined("PLUGIN_TRANSFERTICKETENTITY_DIR")) {
+    define("PLUGIN_TRANSFERTICKETENTITY_WEBDIR", Plugin::getWebDir("transferticketentity", false));
+}
 function plugin_init_transferticketentity()
 {
     global $PLUGIN_HOOKS;
 
     // Add a tab for profiles and tickets
-    Plugin::registerClass('PluginTransferticketentityProfile', ['addtabon' => 'Profile']);
     Plugin::registerClass('PluginTransferticketentityTicket', ['addtabon' => 'Ticket']);
     Plugin::registerClass('PluginTransferticketentityEntity', ['addtabon' => 'Entity']);
+
+    $PLUGIN_HOOKS['change_profile']['transferticketentity'] = ['PluginTransferticketentityProfile', 'initProfile'];
+
+    Plugin::registerClass('PluginTransferticketentityProfile', ['addtabon' => ['Profile']]);
+
+    $PLUGIN_HOOKS['add_javascript']['transferticketentity'][] = "js/script.js";
+    $PLUGIN_HOOKS['add_css']['transferticketentity'][] = "css/style.css";
 
     $PLUGIN_HOOKS['csrf_compliant']['transferticketentity'] = true;
 }
@@ -71,18 +80,6 @@ function plugin_transferticketentity_check_prerequisites()
     return true;
 }
 
-function plugin_transferticketentity_check_config($verbose = false)
-{
-    if (true) {
-        return true;
-    }
-
-    if ($verbose) {
-        echo "Installed, but not configured";
-    }
-
-    return false;
-}
 
 function plugin_transferticketentity_options()
 {
