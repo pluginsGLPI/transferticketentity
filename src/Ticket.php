@@ -351,7 +351,7 @@ class Ticket extends CommonDBTM
         $entity_config = new Entity();
         $entities = $entity_config->find(['allow_transfer' => 1]);
         foreach ($entities as $data) {
-            array_push($array, $data['id']);
+            array_push($array, $data['entities_id']);
         }
 
         return $array;
