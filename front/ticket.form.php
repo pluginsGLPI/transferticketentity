@@ -29,12 +29,18 @@
  * --------------------------------------------------------------------------
  */
 
+
 include('../../../inc/includes.php');
 
-$ticket = new PluginTransferticketentityTicket();
+use GlpiPlugin\Transferticketentity\Ticket;
+
+Session::checkRight("plugin_transferticketentity_use", READ);
+
+$ticket = new Ticket();
 
 if (isset($_POST['transfertticket'])) {
-    if (isset($_POST['entity_choice']) && $_POST['entity_choice'] > 0) {
+    if (isset($_POST['entity_choice'])
+        && $_POST['entity_choice'] > 0) {
         $ticket->launchTicketTransfer($_POST);
     } else {
         Session::addMessageAfterRedirect(
@@ -42,6 +48,8 @@ if (isset($_POST['transfertticket'])) {
             true,
             ERROR
         );
+        Html::back();
     }
 }
+
 Html::back();

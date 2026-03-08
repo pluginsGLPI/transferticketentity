@@ -31,6 +31,8 @@
  * -------------------------------------------------------------------------
  */
 
+use GlpiPlugin\Transferticketentity\Ticket;
+
 if (strpos($_SERVER['PHP_SELF'], "showentitygroups.php")) {
     include('../../../inc/includes.php');
     header("Content-Type: text/html; charset=UTF-8");
@@ -42,7 +44,7 @@ if (strpos($_SERVER['PHP_SELF'], "showentitygroups.php")) {
 if (isset($_POST['entity_selection'])) {
     $entitites_id = $_POST['entity_selection'];
 
-    $getGroupEntities = PluginTransferticketentityTicket::getGroupEntities($entitites_id);
+    $getGroupEntities = Ticket::getGroupEntities($entitites_id);
 
     $groups[0] = Dropdown::EMPTY_VALUE;
     foreach ($getGroupEntities as $key => $group) {

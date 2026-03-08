@@ -29,6 +29,11 @@
  --------------------------------------------------------------------------
 */
 
+use GlpiPlugin\Transferticketentity\Entity;
+use GlpiPlugin\Transferticketentity\Profile;
+use GlpiPlugin\Transferticketentity\Ticket;
+
+
 define('TRANSFERTICKETENTITY_VERSION', '1.1.4');
 
 if (!defined("PLUGIN_TRANSFERTICKETENTITY_DIR")) {
@@ -40,12 +45,12 @@ function plugin_init_transferticketentity()
     global $PLUGIN_HOOKS;
 
     // Add a tab for profiles and tickets
-    Plugin::registerClass('PluginTransferticketentityTicket', ['addtabon' => 'Ticket']);
-    Plugin::registerClass('PluginTransferticketentityEntity', ['addtabon' => 'Entity']);
+    Plugin::registerClass(Ticket::class, ['addtabon' => 'Ticket']);
+    Plugin::registerClass(Entity::class, ['addtabon' => 'Entity']);
 
-    $PLUGIN_HOOKS['change_profile']['transferticketentity'] = ['PluginTransferticketentityProfile', 'initProfile'];
+    $PLUGIN_HOOKS['change_profile']['transferticketentity'] = [Profile::class, 'initProfile'];
 
-    Plugin::registerClass('PluginTransferticketentityProfile', ['addtabon' => ['Profile']]);
+    Plugin::registerClass(Profile::class, ['addtabon' => ['Profile']]);
 
     $PLUGIN_HOOKS['add_css']['transferticketentity'][] = "css/style.css";
 

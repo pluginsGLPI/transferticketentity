@@ -31,9 +31,13 @@
 
 include('../../../inc/includes.php');
 
+use GlpiPlugin\Transferticketentity\Entity;
+use GlpiPlugin\Transferticketentity\Ticket;
+
+
 Session::checkRight("entity", UPDATE);
 
-$config = new PluginTransferticketentityEntity();
+$config = new Entity();
 
 if (isset($_POST["update"])) {
     $config_data = $config::getInstance($_POST['entities_id']);
@@ -44,14 +48,12 @@ if (isset($_POST["update"])) {
         if ($_POST['allow_transfer'] == 0) {
             $config->delete(['id' => $_POST['id']]);
         } else {
-
             $params['entity_choice'] = $_POST['entities_id'];
-            $checkMandatoryCategory = PluginTransferticketentityTicket::checkMandatoryCategory($params);
+            $checkMandatoryCategory = Ticket::checkMandatoryCategory($params);
 
             if ($checkMandatoryCategory
                 && $_POST['keep_category'] == 0
                 && $_POST['itilcategories_id'] == 0) {
-
                 Session::addMessageAfterRedirect(
                     __(
                         "The category is mandatory in the ticket template assigned to the entity",

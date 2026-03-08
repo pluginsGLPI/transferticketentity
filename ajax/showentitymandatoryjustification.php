@@ -31,6 +31,8 @@
  * -------------------------------------------------------------------------
  */
 
+use GlpiPlugin\Transferticketentity\Entity;
+
 if (strpos($_SERVER['PHP_SELF'], "showentitymandatoryjustification.php")) {
     include('../../../inc/includes.php');
     header("Content-Type: text/html; charset=UTF-8");
@@ -43,7 +45,7 @@ if (isset($_POST['entity_selection'])) {
     $entitites_id = $_POST['entity_selection'];
 
     $params['entity_choice'] = $entitites_id;
-    $getEntitiesRights = PluginTransferticketentityEntity::checkEntityRight($params);
+    $getEntitiesRights = Entity::checkEntityRight($params);
 
     if ($getEntitiesRights['justification_transfer'] == 1) {
         echo "<span class='text-danger'>";

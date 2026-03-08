@@ -29,17 +29,34 @@
  * --------------------------------------------------------------------------
  */
 
+namespace GlpiPlugin\Transferticketentity;
+
+use CommonDBTM;
+use CommonGLPI;
+use Dropdown;
+use Glpi\Application\View\TemplateRenderer;
+use Html;
+use Session;
+
 if (!defined('GLPI_ROOT')) {
     die("Sorry. You can't access directly to this file");
 }
 
-class PluginTransferticketentityEntity extends CommonDBTM
+class Entity extends CommonDBTM
 {
     public static $rightname = "entity";
 
     public static function getTable($classname = null)
     {
         return "glpi_plugin_transferticketentity_entities_settings";
+    }
+
+    /**
+     * @return string
+     */
+    public static function getIcon()
+    {
+        return "ti ti-transfer";
     }
 
     public static function getInstance($entities_id)
@@ -113,7 +130,7 @@ class PluginTransferticketentityEntity extends CommonDBTM
      */
     public function getTabNameForItem(CommonGLPI $item, $withtemplate = 0)
     {
-        if ($item->getType() == 'Entity') {
+        if ($item->getType() == \Entity::class) {
             return self::createTabEntry(__("Transfer Ticket Entity", "transferticketentity"));
         }
         return '';
@@ -129,7 +146,7 @@ class PluginTransferticketentityEntity extends CommonDBTM
      */
     public static function displayTabContentForItem(CommonGLPI $item, $tabnum = 1, $withtemplate = 0)
     {
-        if ($item->getType() == 'Entity') {
+        if ($item->getType() == \Entity::class) {
             $entity = new self();
             $entity->showFormMcv($item);
         }
@@ -141,20 +158,17 @@ class PluginTransferticketentityEntity extends CommonDBTM
     /**
      * Display the ticket transfer form
      *
-     * @return void
+     * @return true
      */
     public function showFormMcv($item)
     {
-
-        echo Html::script(PLUGIN_TRANSFERTICKETENTITY_WEBDIR . "/js/entitySettings.js");
-
         $checkRights = new self();
         $checkRights->getFromDBByCrit(['entities_id' => $item->getID()]);
 
         $availableCategories = self::availableCategories();
 
         $params['entity_choice'] = $item->getID();
-        $checkMandatoryCategory = PluginTransferticketentityTicket::checkMandatoryCategory($params);
+        $checkMandatoryCategory = Ticket::checkMandatoryCategory($params);
 
         if (empty($checkRights->fields)) {
             $checkRights->fields['allow_entity_only_transfer'] = 0;
@@ -164,104 +178,22 @@ class PluginTransferticketentityEntity extends CommonDBTM
             $checkRights->fields['itilcategories_id'] = 0;
         }
 
-        if ($canedit = Session::haveRightsOr(self::$rightname, [CREATE, UPDATE, PURGE])) {
-            echo "<form class='transferticketentity' method='post' action='" . self::getFormURL() . "'>";
-        }
+        $target = self::getFormURL();
 
-        echo "<table class='tab_cadre_fixe'>";
-        echo "<tbody>";
-        echo "<tr>";
-        echo "<th>";
-        echo __("Settings Transfer Ticket Entity", "transferticketentity");
-        echo "</th>";
-        echo "</tr>";
-        echo "<tr class='tab_bg_1'>";
-        echo "<td>";
-        echo __('Allow Transfer function', 'transferticketentity');
-        echo "&nbsp;";
-        echo "&nbsp;";
-        echo Dropdown::showYesNo(
-            'allow_transfer',
-            $checkRights->fields['allow_transfer'],
-            -1,
-            ['display' => false, 'class' => 'allow_transfer']
-        );
-        echo "</td>";
-        echo "</tr>";
-        echo "<tr class='tab_bg_1' id='allow_entity_only_transfer'>";
-        echo "<td>";
-        echo __('Assigned group required', 'transferticketentity');
-        echo "&nbsp;";
-        echo "&nbsp;";
-        echo Dropdown::showYesNo(
-            'allow_entity_only_transfer',
-            $checkRights->fields['allow_entity_only_transfer'],
-            -1,
-            ['display' => false]
-        );
-        echo "</td>";
-        echo "</tr>";
-        echo "<tr class='tab_bg_1' id='justification_transfer'>";
-        echo "<td>";
-        echo __('Justification required', 'transferticketentity');
-        echo "&nbsp;";
-        echo "&nbsp;";
-        echo Dropdown::showYesNo(
-            'justification_transfer',
-            $checkRights->fields['justification_transfer'],
-            -1,
-            ['display' => false]
-        );
-        echo "</td>";
-        echo "</tr>";
-        echo "<tr class='tab_bg_1' id='keep_category'>";
-        echo "<td>";
-        echo __('Keep category after transfer', 'transferticketentity');
-        echo "&nbsp;";
-        echo "&nbsp;";
-        echo Dropdown::showYesNo(
-            'keep_category',
-            $checkRights->fields['keep_category'],
-            -1,
-            ['display' => false]
-        );
-        echo "</td>";
-        echo "</tr>";
-        echo "<tr class='tab_bg_1' id='itilcategories_id'>";
-        echo "<td>";
-        echo __('Default category', 'transferticketentity');
-        echo "&nbsp;";
-        echo "&nbsp;";
-        Dropdown::showFromArray(
-            'itilcategories_id',
-            $availableCategories,
-            ['value' => $checkRights->fields['itilcategories_id'],
-                'class' => 'itilcategories_id']
+        TemplateRenderer::getInstance()->display(
+            '@transferticketentity/config.html.twig',
+            [
+                'can_edit' => Session::haveRightsOr(self::$rightname, [CREATE, UPDATE, PURGE]),
+                'item' => $checkRights,
+                'action' => $target,
+                'id' => $checkRights->getID(),
+                'entities_id' => $item->getID(),
+                'availableCategories' => $availableCategories,
+                'checkMandatoryCategory' => $checkMandatoryCategory,
+            ],
         );
 
-        if($checkMandatoryCategory) {
-            echo "<br><br><div class='alert alert-warning'>";
-            echo "<p>" .
-                __("The category is mandatory in the ticket template assigned to the entity", "transferticketentity")
-                . "</p>";
-            echo "</div>";
-        }
-        echo "</td>";
-        echo "</tr>";
-        echo "</tbody>";
-        echo "</table>";
-        echo Html::hidden("entities_id", ["value" => $item->getID()]);
-        if ($checkRights->getID()) {
-            echo Html::hidden("id", ["value" => $checkRights->getID()]);
-        }
-
-        if ($canedit) {
-            echo "<div class='center'>";
-            echo Html::submit(_sx('button', 'Save'), ['name' => 'update', 'class' => 'btn btn-primary']);
-            echo "</div>\n";
-            Html::closeForm();
-        }
-
+        return true;
     }
 
     public static function getEntitiesRights()

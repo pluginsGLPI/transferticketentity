@@ -29,6 +29,8 @@
  --------------------------------------------------------------------------
 */
 
+use GlpiPlugin\Transferticketentity\Profile;
+
 /**
  * Install hook
  *
@@ -38,7 +40,7 @@ function plugin_transferticketentity_install()
 {
     global $DB;
 
-    PluginTransferticketentityProfile::createFirstAccess($_SESSION["glpiactiveprofile"]["id"]);
+    Profile::createFirstAccess($_SESSION["glpiactiveprofile"]["id"]);
 
     $default_charset = DBConnection::getDefaultCharset();
     $default_collation = DBConnection::getDefaultCollation();
@@ -81,7 +83,7 @@ function plugin_transferticketentity_uninstall()
 
     //Delete rights associated with the plugin
     $profileRight = new ProfileRight();
-    foreach (PluginTransferticketentityProfile::getAllRights() as $right) {
+    foreach (Profile::getAllRights() as $right) {
         $profileRight->deleteByCriteria(['name' => $right['field']]);
     }
     return true;

@@ -29,26 +29,33 @@
  * --------------------------------------------------------------------------
  */
 
+namespace GlpiPlugin\Transferticketentity;
+
+use CommonGLPI;
+use DbUtils;
+use Glpi\Application\View\TemplateRenderer;
+use ProfileRight;
+use Session;
+
 if (!defined('GLPI_ROOT')) {
     die("Sorry. You can't access directly to this file");
 }
 
 /**
- * Class PluginTransferticketentityProfile
+ * Class Profile
  *
  * This class manages the profile rights of the plugin
  */
-class PluginTransferticketentityProfile extends Profile
+class Profile extends \Profile
 {
-    static $rightname = "profile";
+    public static $rightname = "profile";
+
     /**
-     * @param int $nb
-     *
      * @return string
      */
-    public static function getTypeName($nb = 0)
+    public static function getIcon()
     {
-        return __('Rights management');
+        return "ti ti-transfer";
     }
 
     /**
@@ -71,70 +78,37 @@ class PluginTransferticketentityProfile extends Profile
     }
 
     /**
-     * display tab content for item
-     *
      * @param CommonGLPI $item
-     * @param        $tabnum
-     * @param        $withtemplate
+     * @param int        $tabnum
+     * @param int        $withtemplate
      *
-     * @return boolean
-     * @global       $CFG_GLPI
+     * @return bool
      */
-    public static function displayTabContentForItem(CommonGLPI $item, $tabnum = 1, $withtemplate = 0)
-    {
-
-        if ($item->getType() == 'Profile') {
-            $ID   = $item->getID();
-            $prof = new self();
-
-            self::addDefaultProfileInfos(
-                $ID,
-                ['plugin_transferticketentity_use' => 0,
-                    'plugin_transferticketentity_bypass' => 0,
-                ]
-            );
-            $prof->showForm($ID);
+    public static function displayTabContentForItem(
+        CommonGLPI $item,
+        $tabnum = 1,
+        $withtemplate = 0
+    ) {
+        if (!$item instanceof \Profile || !self::canView()) {
+            return false;
         }
+
+        $profile = new \Profile();
+        $profile->getFromDB($item->getID());
+
+        $rights = self::getAllRights();
+
+        $twig = TemplateRenderer::getInstance();
+        $twig->display('@transferticketentity/profile.html.twig', [
+            'id'      => $item->getID(),
+            'profile' => $profile,
+            'title'   => self::getTypeName(Session::getPluralNumber()),
+            'rights'  => $rights,
+        ]);
 
         return true;
     }
 
-    /**
-     * show profile form
-     *
-     * @param  $ID
-     * @param  $options
-     *
-     * @return boolean
-     */
-    public function showForm($profiles_id = 0, $openform = true, $closeform = true)
-    {
-
-        echo "<div class='firstbloc'>";
-        if (($canedit = Session::haveRightsOr(self::$rightname, [UPDATE, PURGE]))
-          && $openform) {
-            $profile = new Profile();
-            echo "<form method='post' action='" . $profile->getFormURL() . "'>";
-        }
-
-        $profile = new Profile();
-        $profile->getFromDB($profiles_id);
-
-        $rights = $this->getAllRights();
-        $profile->displayRightsChoiceMatrix($rights, ['canedit'       => $canedit,
-            'default_class' => 'tab_bg_2',
-            'title'         => __("Transfer Ticket Entity", "transferticketentity")]);
-
-        if ($canedit
-          && $closeform) {
-            echo "<div class='center'>";
-            echo Html::hidden('id', ['value' => $profiles_id]);
-            echo Html::submit(_sx('button', 'Save'), ['name' => 'update', 'class' => 'btn btn-primary']);
-            echo "</div>\n";
-            Html::closeForm();
-        }
-        echo "</div>";
-    }
 
     /**
      * Get all rights
@@ -143,17 +117,17 @@ class PluginTransferticketentityProfile extends Profile
      *
      * @return array
      */
-    public static function getAllRights($all = false)
+    public static function getAllRights()
     {
 
-        $rights[] = ['itemtype' => PluginTransferticketentityEntity::class,
+        $rights[] = ['itemtype' => Entity::class,
             'label'    => __('Authorized entity transfer', 'transferticketentity'),
             'field'    => 'plugin_transferticketentity_use',
             'rights' => [
                 READ  => __('Read'),
             ],];
 
-        $rights[] = ['itemtype' => PluginTransferticketentityEntity::class,
+        $rights[] = ['itemtype' => Entity::class,
             'label'    => __('Transfer authorized without assignment of technician or associated group', 'transferticketentity'),
             'field'    => 'plugin_transferticketentity_bypass',
             'rights' => [
