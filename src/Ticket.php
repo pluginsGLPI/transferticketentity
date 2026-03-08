@@ -98,13 +98,28 @@ class Ticket extends CommonDBTM
      */
     public static function getGroupEntities($entities)
     {
+        global $DB;
+
         $array = [];
 
-        $group = new Group();
-        $groups = $group->find(['is_assign' => 1, 'entities_id' => $entities], 'name');
+        $criteria = [
+            'SELECT' => ['id', 'name'],
+            'FROM' => 'glpi_groups',
+            'WHERE' => [
+                'is_assign' => 1,
+            ],
+            'ORDERBY' => 'name'
+        ];
+        $criteria['WHERE'] = $criteria['WHERE'] + getEntitiesRestrictCriteria(
+                'glpi_groups','',$entities, true
+            );
 
-        foreach ($groups as $data) {
-            $array[$data['id']] = $data['name'];
+        $iterator = $DB->request($criteria);
+
+        if (count($iterator) > 0) {
+            foreach ($iterator as $data) {
+                $array[$data['id']] = $data['name'];
+            }
         }
 
         return $array;
@@ -364,15 +379,30 @@ class Ticket extends CommonDBTM
      */
     public static function checkGroup($params)
     {
-        $entity_choice = $params['entity_choice'];
+        global $DB;
 
         $array = [];
 
-        $group = new Group();
-        $groups = $group->find(['is_assign' => 1, 'entities_id' => $entity_choice]);
+        $entities = $params['entity_choice'];
 
-        foreach ($groups as $data) {
-            array_push($array, $data['id']);
+        $criteria = [
+            'SELECT' => 'id',
+            'FROM' => 'glpi_groups',
+            'WHERE' => [
+                'is_assign' => 1,
+            ],
+            'ORDERBY' => 'name'
+        ];
+        $criteria['WHERE'] = $criteria['WHERE'] + getEntitiesRestrictCriteria(
+                'glpi_groups','', $entities, true
+            );
+
+        $iterator = $DB->request($criteria);
+
+        if (count($iterator) > 0) {
+            foreach ($iterator as $data) {
+                array_push($array, $data['id']);
+            }
         }
 
         return $array;
