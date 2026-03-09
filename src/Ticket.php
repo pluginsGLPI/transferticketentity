@@ -1,4 +1,5 @@
 <?php
+
 /**
  * -------------------------------------------------------------------------
  * LICENSE
@@ -30,7 +31,6 @@
 
 namespace GlpiPlugin\Transferticketentity;
 
-use Ajax;
 use CommonDBTM;
 use CommonITILActor;
 use CommonITILObject;
@@ -109,11 +109,14 @@ class Ticket extends CommonDBTM
             'WHERE' => [
                 'is_assign' => 1,
             ],
-            'ORDERBY' => 'name'
+            'ORDERBY' => 'name',
         ];
         $criteria['WHERE'] = $criteria['WHERE'] + getEntitiesRestrictCriteria(
-                'glpi_groups','',$entities, true
-            );
+            'glpi_groups',
+            '',
+            $entities,
+            true
+        );
 
         $iterator = $DB->request($criteria);
 
@@ -292,11 +295,14 @@ class Ticket extends CommonDBTM
             'WHERE' => [
                 'is_assign' => 1,
             ],
-            'ORDERBY' => 'name'
+            'ORDERBY' => 'name',
         ];
         $criteria['WHERE'] = $criteria['WHERE'] + getEntitiesRestrictCriteria(
-                'glpi_groups','', $entities, true
-            );
+            'glpi_groups',
+            '',
+            $entities,
+            true
+        );
 
         $iterator = $DB->request($criteria);
 
@@ -326,7 +332,7 @@ class Ticket extends CommonDBTM
         $result = $DB->request([
             'SELECT' => 'itilcategories_id',
             'FROM' => 'glpi_tickets',
-            'WHERE' => ['id' => $id_ticket]
+            'WHERE' => ['id' => $id_ticket],
         ]);
 
         $getTicketCategory = '';
@@ -337,7 +343,7 @@ class Ticket extends CommonDBTM
 
         $result = $DB->request([
             'FROM' => 'glpi_entities',
-            'WHERE' => ['id' => $targetEntity]
+            'WHERE' => ['id' => $targetEntity],
         ]);
 
         $ancestorsEntities = [];
@@ -354,7 +360,7 @@ class Ticket extends CommonDBTM
 
         $result = $DB->request([
             'FROM' => 'glpi_itilcategories',
-            'WHERE' => ['id' => $getTicketCategory]
+            'WHERE' => ['id' => $getTicketCategory],
         ]);
 
 
@@ -390,7 +396,8 @@ class Ticket extends CommonDBTM
      */
     public function getTabNameForItem(CommonGLPI $item, $withtemplate = 0)
     {
-        if ($item->getType() == \Ticket::class) {
+        if ($item->getType() == \Ticket::class
+            && $_SESSION['glpiactiveprofile']['interface'] == 'central') {
             return self::createTabEntry(__("Transfer Ticket Entity", "transferticketentity"));
         }
         return '';
@@ -407,7 +414,8 @@ class Ticket extends CommonDBTM
      */
     public static function displayTabContentForItem(CommonGLPI $item, $tabnum = 1, $withtemplate = 0)
     {
-        if ($item->getType() == \Ticket::class) {
+        if ($item->getType() == \Ticket::class
+            && $_SESSION['glpiactiveprofile']['interface'] == 'central') {
             $ticket = new self();
             $ticket->showFormMcv($item);
         }
@@ -591,7 +599,7 @@ class Ticket extends CommonDBTM
             // Remove the link with the current user
             $delete_link_user = [
                 'tickets_id' => $params['id_ticket'],
-                'type' => CommonITILActor::ASSIGN
+                'type' => CommonITILActor::ASSIGN,
             ];
 
             $ticket_user = new Ticket_User();
@@ -605,7 +613,7 @@ class Ticket extends CommonDBTM
             // Remove the link with the current group
             $delete_link_group = [
                 'tickets_id' => $params['id_ticket'],
-                'type' => CommonITILActor::ASSIGN
+                'type' => CommonITILActor::ASSIGN,
             ];
 
             $group_ticket = new Group_Ticket();
@@ -623,7 +631,7 @@ class Ticket extends CommonDBTM
                 $group_check = [
                     'tickets_id' => $params['id_ticket'],
                     'groups_id' => $params['group_choice'],
-                    'type' => CommonITILActor::ASSIGN
+                    'type' => CommonITILActor::ASSIGN,
                 ];
 
                 if (!$group_ticket->find($group_check)) {
@@ -636,7 +644,7 @@ class Ticket extends CommonDBTM
             $groupText = "<br> <br> $justification";
 
             if ($params['group_choice'] && $params['group_choice'] > 0) {
-                $groupText = __("in the group", "transferticketentity") ." ". $group->getName() ."\n <br> <br> $justification";
+                $groupText = __("in the group", "transferticketentity") . " " . $group->getName() . "\n <br> <br> $justification";
             }
 
             // Log the transfer in a task
@@ -648,7 +656,7 @@ class Ticket extends CommonDBTM
                 'content' => __(
                     "Escalation to",
                     "transferticketentity"
-                ) . " $theEntity " . $groupText
+                ) . " $theEntity " . $groupText,
             ]);
 
             $ticket = new \Ticket();
@@ -662,7 +670,7 @@ class Ticket extends CommonDBTM
                 INFO
             );
 
-            Html::redirect($CFG_GLPI["root_doc"] . "/front/ticket.form.php?id=".$ticket->getID());
+            Html::redirect($CFG_GLPI["root_doc"] . "/front/ticket.form.php?id=" . $ticket->getID());
         }
     }
 }
