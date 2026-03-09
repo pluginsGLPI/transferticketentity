@@ -36,6 +36,7 @@ use CommonITILActor;
 use CommonITILObject;
 use CommonGLPI;
 use Dropdown;
+use Glpi\Application\View\TemplateRenderer;
 use Group;
 use Group_Ticket;
 use Group_User;
@@ -183,129 +184,29 @@ class Ticket extends CommonDBTM
         }
 
 
-        $id_ticket = $ticket->getID();
-        $id_user = $_SESSION["glpiID"];
-
-        echo "<form  action='" . $this->getFormURL() . "' method='post'>";
-        echo "<div class='card'>";
-
-        echo "<div class='card-header'>";
-        echo "<h3 class='card-title'>";
-        echo __('Transfer the ticket', 'transferticketentity')." - ".$entity->getName();
-        echo "</h3>";
-        echo "</div>";
-
-        echo "<div class='card-body'>";
-        echo "<div class='card-text'>";
-
-        echo "<p class='alert alert-warning'>" . __(
-            "Once the transfer has been completed, the ticket will remain visible only if you have the required rights.",
-            "transferticketentity"
-        ) . "</p>";
-
-        echo "<div class='form-field row align-items-center col-12 col-sm-12 mb-2 tt_entity_choice'>";
-        echo "<label class='col-form-label col-xxl-5 text-xxl-end' for='entity_choice'>" . __(
-            "Select ticket entity to transfer",
-            "transferticketentity"
-        );
-        echo "</label>";
-
-        echo "<div class='col-xxl-7 field-container'>";
-        $entities[0] = Dropdown::EMPTY_VALUE;
-        foreach ($getEntitiesRights as $entity) {
-            if ($entity['allow_transfer']) {
-                $entities[$entity['entities_id']] = $entity['name'];
+        $entities_selection[0] = Dropdown::EMPTY_VALUE;
+        foreach ($getEntitiesRights as $getEntitiesRight) {
+            if ($getEntitiesRight['allow_transfer']) {
+                $entities_selection[$getEntitiesRight['entities_id']] = $getEntitiesRight['name'];
             }
         }
-        $rand = Dropdown::showFromArray(
-            'entity_choice',
-            $entities,
-        );
 
-        Ajax::updateItemOnSelectEvent(
-            "dropdown_entity_choice$rand",
-            "show_entitygroup",
-            PLUGIN_TRANSFERTICKETENTITY_FULLWEBDIR . "/ajax/showentitygroups.php",
+        $target = $this->getFormURL();
+
+        TemplateRenderer::getInstance()->display(
+            '@transferticketentity/ticket.html.twig',
             [
-                'entity_selection' => '__VALUE__',
-            ]
+                'can_edit' => Session::haveRight(self::$rightname, READ),
+                'root_plugin' => PLUGIN_TRANSFERTICKETENTITY_WEBDIR,
+                'action' => $target,
+                'id_ticket' => $ticket->getID(),
+                'id_user' => $_SESSION['glpiID'],
+                'entities_id' => $ticket->getID(),
+                'entities_name' => $entity->getName(),
+                'entities' => $entities_selection,
+            ],
         );
 
-        Ajax::updateItemOnSelectEvent(
-            "dropdown_entity_choice$rand",
-            "showmandatoryjustification",
-            PLUGIN_TRANSFERTICKETENTITY_FULLWEBDIR . "/ajax/showentitymandatoryjustification.php",
-            [
-                'entity_selection' => '__VALUE__',
-            ]
-        );
-
-        Ajax::updateItemOnSelectEvent(
-            "dropdown_entity_choice$rand",
-            "showmandatorygroup",
-            PLUGIN_TRANSFERTICKETENTITY_FULLWEBDIR . "/ajax/showentitymandatorygroup.php",
-            [
-                'entity_selection' => '__VALUE__',
-            ]
-        );
-
-        echo "</div>";
-        echo "</div>";
-
-        echo "<div class='form-field row align-items-center col-12 col-sm-12 mb-2'>";
-        echo "<label class='col-form-label col-xxl-5 text-xxl-end' for='group_choice'>";
-        echo __("Select the group to assign", "transferticketentity");
-        echo "<span id='showmandatorygroup'>";
-        echo "</span>";
-        echo "</label>";
-
-        echo "<div class='col-xxl-7 field-container'>";
-        echo "<span id='show_entitygroup'>";
-
-        echo "</span>";
-        echo "</div>";
-        echo "</div>";
-
-
-        echo "<div class='form-field row align-items-start col-12 col-sm-12 mb-2'>";
-        echo "<label class='col-form-label col-xxl-5 text-xxl-end' for='justification' style='vertical-align: middle;'>";
-        echo __("Justification", "transferticketentity");
-        echo "<span id='showmandatoryjustification'>";
-        echo "</span>";
-        echo "</label>";
-
-        echo "<div class='col-xxl-7 field-container'>";
-
-        Html::textarea([
-            'name' => "justification",
-            'cols' => '45',
-            'rows' => '5',
-            'enable_richtext' => false,
-            'enable_fileupload' => false
-        ]);
-
-        echo "<br><p class='alert alert-warning'>" . __(
-            "Warning, category will be reset if it does not exist in the target entity.",
-            "transferticketentity"
-        ) . "</p>";
-
-        echo Html::hidden("id_ticket", ["value" => "$id_ticket"]);
-        echo Html::hidden("id_user", ["value" => "$id_user"]);
-
-        echo "</div><br>";
-        echo "<div class='text-end'>";
-        echo Html::submit(
-            __('Confirm', 'transferticketentity'),
-            ['name' => 'transfertticket', 'class' => 'btn btn-primary']
-        );
-        echo "</div>";
-        echo "</div>";
-
-        echo "</div>";
-        echo "</div>";
-        echo "</div>";
-
-        Html::closeForm();
     }
 
 
