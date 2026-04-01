@@ -33,9 +33,9 @@ use GlpiPlugin\Transferticketentity\Entity;
 use GlpiPlugin\Transferticketentity\Profile;
 use GlpiPlugin\Transferticketentity\Ticket;
 
-Global $CFG_GLPI;
+global $CFG_GLPI;
 
-define('TRANSFERTICKETENTITY_VERSION', '1.2.0');
+define('TRANSFERTICKETENTITY_VERSION', '1.1.9');
 
 if (!defined("PLUGIN_TRANSFERTICKETENTITY_DIR")) {
     $root = $CFG_GLPI['root_doc'] . '/plugins/transferticketentity';
@@ -71,8 +71,8 @@ function plugin_version_transferticketentity()
             'glpi' => [
                 'min' => '11.0',
                 'max' => '12.0',
-                'dev' => false
-            ]
+                'dev' => false,
+            ],
         ]];
 }
 
