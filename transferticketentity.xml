@@ -2,7 +2,7 @@
       <name>Transfer Ticket Entity</name>
       <key>transferticketentity</key>
       <state>stable</state>
-      <logo>https://raw.githubusercontent.com/departement-maine-et-loire/transferticketentity/master/img/logo.png</logo>
+      <logo>https://raw.githubusercontent.com/pluginsGLPI/transferticketentity/master/img/logo.png</logo>
       <description>
          <short>
             <fr>Ce plugin permet aux profils autorisés d'envoyer les tickets à une entité où ils n'ont aucun droit d'accès.</fr>
@@ -13,14 +13,22 @@
             <en>This plugin enables authorized profiles to transfer tickets from one entity to another to which they do not have access. It is designed for organizations that have configured their GLPI activity perimeters by entity (HR, Accounting, IS, etc.). The aim is to be able to transfer a ticket between "GLPI" technicians from different entities, and to continue to ensure the confidentiality of data between entities.</en>
          </long>
       </description>
-      <homepage>https://github.com/departement-maine-et-loire/transferticketentity</homepage>
-      <download>https://github.com/departement-maine-et-loire/transferticketentity/releases</download>
-      <issues>https://github.com/departement-maine-et-loire/transferticketentity/issues</issues>
-      <readme>https://raw.githubusercontent.com/departement-maine-et-loire/transferticketentity/master/README.md</readme>
+      <homepage>https://github.com/pluginsGLPI/transferticketentity</homepage>
+      <download>https://github.com/pluginsGLPI/transferticketentity/releases</download>
+      <issues>https://github.com/pluginsGLPI/transferticketentity/issues</issues>
+      <readme>https://raw.githubusercontent.com/pluginsGLPI/transferticketentity/master/README.md</readme>
       <authors>
+          <author>Xavier CAILLAUD</author>
+          <author>Infotel</author>
          <author>D&#xE9;partement de Maine-et-Loire</author>
          <author>Yannick COMBA</author>
       </authors>
+    <versions>
+        <version>
+            <num>1.2.0</num>
+            <compatibility>~11.0.0</compatibility>
+        </version>
+    </versions>
       <versions>
          <version>
             <num>1.1.3</num>
@@ -33,7 +41,7 @@
          <lang>es_VE</lang>
          <lang>pt_BR</lang>
       </langs>
-      <license></license>
+    <license><![CDATA[GPL v2+]]></license>
       <tags>
          <fr>
             <tag>Ticket</tag>
@@ -43,7 +51,7 @@
          </en>
       </tags>
       <screenshots>
-         <screenshot>https://raw.githubusercontent.com/departement-maine-et-loire/transferticketentity/master/img/gifs/TransferTicketEntity_EN.gif</screenshot>
-         <screenshot>https://raw.githubusercontent.com/departement-maine-et-loire/transferticketentity/master/img/gifs/TransferTicketEntity_FR.gif</screenshot>
+         <screenshot>https://raw.githubusercontent.com/pluginsGLPI/transferticketentity/master/img/gifs/TransferTicketEntity_EN.gif</screenshot>
+         <screenshot>https://raw.githubusercontent.com/pluginsGLPI/transferticketentity/master/img/gifs/TransferTicketEntity_FR.gif</screenshot>
       </screenshots>
 </root>
