@@ -73,10 +73,35 @@ class Entity extends CommonDBTM
      *
      * @return array
      */
-    public function availableCategories()
+    public function prepareInputForAdd($input)
+    {
+        return array_intersect_key($input, array_flip([
+            'entities_id',
+            'allow_entity_only_transfer',
+            'justification_transfer',
+            'allow_transfer',
+            'keep_category',
+            'itilcategories_id',
+        ]));
+    }
+
+    public function prepareInputForUpdate($input)
+    {
+        return array_intersect_key($input, array_flip([
+            'id',
+            'entities_id',
+            'allow_entity_only_transfer',
+            'justification_transfer',
+            'allow_transfer',
+            'keep_category',
+            'itilcategories_id',
+        ]));
+    }
+
+    public function availableCategories(int $entity_id)
     {
         global $DB;
-        $entity = $_REQUEST['id'];
+        $entity = $entity_id;
         $allItilCategories = [0 => Dropdown::EMPTY_VALUE];
 
         $result = $DB->request([
@@ -165,7 +190,7 @@ class Entity extends CommonDBTM
         $checkRights = new self();
         $checkRights->getFromDBByCrit(['entities_id' => $item->getID()]);
 
-        $availableCategories = self::availableCategories();
+        $availableCategories = self::availableCategories($item->getID());
 
         $params['entity_choice'] = $item->getID();
         $checkMandatoryCategory = Ticket::checkMandatoryCategory($params);

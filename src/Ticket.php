@@ -664,7 +664,11 @@ class Ticket extends CommonDBTM
                 INFO
             );
 
-            Html::redirect($CFG_GLPI["root_doc"] . "/front/ticket.form.php?id=".$ticket->getID());
+            if ($ticket->getID() > 0) {
+                Html::redirect($CFG_GLPI["root_doc"] . "/front/ticket.form.php?id=" . (int) $ticket->getID());
+            } else {
+                Html::back();
+            }
         }
     }
 }

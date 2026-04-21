@@ -33,6 +33,8 @@
 
 use GlpiPlugin\Transferticketentity\Entity;
 
+Session::checkLoginUser();
+
 if (strpos($_SERVER['PHP_SELF'], "showentitymandatoryjustification.php")) {
     header("Content-Type: text/html; charset=UTF-8");
     Html::header_nocache();

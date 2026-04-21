@@ -33,6 +33,8 @@
 
 use GlpiPlugin\Transferticketentity\Ticket;
 
+Session::checkLoginUser();
+
 if (strpos($_SERVER['PHP_SELF'], "showentitygroups.php")) {
     header("Content-Type: text/html; charset=UTF-8");
     Html::header_nocache();
