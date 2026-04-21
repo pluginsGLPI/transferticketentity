@@ -36,7 +36,7 @@ use GlpiPlugin\Transferticketentity\Ticket;
 
 global $CFG_GLPI;
 
-define('TRANSFERTICKETENTITY_VERSION', '1.2.1');
+define('PLUGIN_TRANSFERTICKETENTITY_VERSION', '1.2.1');
 
 if (!defined("PLUGIN_TRANSFERTICKETENTITY_WEBDIR")) {
     $root = $CFG_GLPI['root_doc'] . '/plugins/transferticketentity';
@@ -65,7 +65,7 @@ function plugin_version_transferticketentity()
 
     return [
         'name'           => 'TransferTicketEntity',
-        'version'        => TRANSFERTICKETENTITY_VERSION,
+        'version'        => PLUGIN_TRANSFERTICKETENTITY_VERSION,
         'author'         => 'Yannick COMBA & <a href="https://blogglpi.infotel.com">Infotel</a>',
         'license'        => 'GPLv3+',
         'homepage'       => 'https://github.com/InfotelGLPI/transferticketentity',
@@ -81,7 +81,6 @@ function plugin_version_transferticketentity()
 
 function plugin_transferticketentity_options()
 {
-    
     return [
         Plugin::OPTION_AUTOINSTALL_DISABLED => true,
     ];
