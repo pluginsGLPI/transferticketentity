@@ -637,7 +637,8 @@ class Ticket extends CommonDBTM
 
             $groupText = "<br> <br> $justification";
 
-            if ($params['group_choice'] && $params['group_choice'] > 0) {
+            if (isset($params['group_choice'])
+                && $params['group_choice'] > 0) {
                 $groupText = __("in the group", "transferticketentity") ." ". $group->getName() ."\n <br> <br> $justification";
             }
 
