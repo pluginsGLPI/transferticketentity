@@ -81,6 +81,7 @@ function plugin_version_transferticketentity()
 
 function plugin_transferticketentity_options()
 {
+    
     return [
         Plugin::OPTION_AUTOINSTALL_DISABLED => true,
     ];
