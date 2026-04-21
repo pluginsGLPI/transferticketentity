@@ -29,15 +29,16 @@
  --------------------------------------------------------------------------
 */
 
+use Glpi\Plugin\Hooks;
 use GlpiPlugin\Transferticketentity\Entity;
 use GlpiPlugin\Transferticketentity\Profile;
 use GlpiPlugin\Transferticketentity\Ticket;
 
 global $CFG_GLPI;
 
-define('TRANSFERTICKETENTITY_VERSION', '1.2.0');
+define('TRANSFERTICKETENTITY_VERSION', '1.2.1');
 
-if (!defined("PLUGIN_TRANSFERTICKETENTITY_DIR")) {
+if (!defined("PLUGIN_TRANSFERTICKETENTITY_WEBDIR")) {
     $root = $CFG_GLPI['root_doc'] . '/plugins/transferticketentity';
     define("PLUGIN_TRANSFERTICKETENTITY_WEBDIR", $root);
 }
@@ -49,13 +50,14 @@ function plugin_init_transferticketentity()
     Plugin::registerClass(Ticket::class, ['addtabon' => 'Ticket']);
     Plugin::registerClass(Entity::class, ['addtabon' => 'Entity']);
 
-    $PLUGIN_HOOKS['change_profile']['transferticketentity'] = [Profile::class, 'initProfile'];
+    if (isset($_SESSION['glpiactiveprofile'])) {
+        $PLUGIN_HOOKS[Hooks::CHANGE_PROFILE]['transferticketentity'] = [Profile::class, 'initProfile'];
+    }
 
     Plugin::registerClass(Profile::class, ['addtabon' => ['Profile']]);
 
-    $PLUGIN_HOOKS['add_css']['transferticketentity'][] = "css/style.css";
+    $PLUGIN_HOOKS[Hooks::ADD_CSS]['transferticketentity'][] = "css/style.css";
 
-    $PLUGIN_HOOKS['csrf_compliant']['transferticketentity'] = true;
 }
 
 function plugin_version_transferticketentity()
