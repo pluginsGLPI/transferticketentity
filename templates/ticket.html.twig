@@ -38,7 +38,6 @@
             <div class="card-header">
                 <input type="hidden" name="_glpi_csrf_token" value="{{ csrf_token() }}">
                 <input type="hidden" name="id_ticket" value="{{ id_ticket }}">
-                <input type="hidden" name="id_user" value="{{ id_user }}">
                 <input type="hidden" name="entities_id" value="{{ entities_id }}">
                 <h3 class="card-title">
                     {{ __('Transfer the ticket', 'transferticketentity') }} - {{ entities_name }}

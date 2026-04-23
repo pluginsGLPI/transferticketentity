@@ -135,8 +135,6 @@ class Ticket extends CommonDBTM
     public function showFormMcv($ticket)
     {
         $params['id_ticket'] = $ticket->getID();
-        $params['id_user'] = $_SESSION['glpiID'];
-
         $entity = new \Entity();
         $entity->getFromDB($ticket->fields['entities_id']);
         $checkAssign = self::checkAssign($params);
@@ -200,7 +198,6 @@ class Ticket extends CommonDBTM
                 'root_plugin' => PLUGIN_TRANSFERTICKETENTITY_WEBDIR,
                 'action' => $target,
                 'id_ticket' => $ticket->getID(),
-                'id_user' => $_SESSION['glpiID'],
                 'entities_id' => $ticket->getID(),
                 'entities_name' => $entity->getName(),
                 'entities' => $entities_selection,
@@ -220,9 +217,7 @@ class Ticket extends CommonDBTM
         $ticket = new \Ticket();
         $ticket->getfromDB($params['id_ticket']);
 
-        $id_user = $params['id_user'];
-
-        $groupTech = Group_User::getUserGroups($id_user);
+        $groupTech = Group_User::getUserGroups($_SESSION['glpiID']);
 
         $checkAssignedTech = [];
         $checkAssignedGroup = [];
@@ -238,7 +233,7 @@ class Ticket extends CommonDBTM
 
         $var_check = 0;
 
-        if (in_array($id_user, $checkAssignedTech)) {
+        if (in_array($_SESSION['glpiID'], $checkAssignedTech)) {
             $var_check++;
         }
 
