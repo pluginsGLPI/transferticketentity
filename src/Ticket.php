@@ -404,7 +404,8 @@ class Ticket extends CommonDBTM
     public static function displayTabContentForItem(CommonGLPI $item, $tabnum = 1, $withtemplate = 0)
     {
         if ($item->getType() == \Ticket::class
-            && $_SESSION['glpiactiveprofile']['interface'] == 'central') {
+            && $_SESSION['glpiactiveprofile']['interface'] == 'central'
+        && Session::haveRight(self::$rightname, READ)) {
             $ticket = new self();
             $ticket->showFormMcv($item);
         }
@@ -463,9 +464,6 @@ class Ticket extends CommonDBTM
         $entity = new \Entity();
         $entity->getfromDB($params['entity_choice']);
         $theEntity = $entity->getName();
-
-        $group = new Group();
-        $group->getfromDB($params['group_choice']);
 
         if (!isset($params['justification'])
             || $params['justification'] == '') {
@@ -634,6 +632,8 @@ class Ticket extends CommonDBTM
 
             if (isset($params['group_choice'])
                 && $params['group_choice'] > 0) {
+                $group = new Group();
+                $group->getfromDB($params['group_choice']);
                 $groupText = __("in the group", "transferticketentity") ." ". $group->getName() ."\n <br> <br> $justification";
             }
 
@@ -653,7 +653,7 @@ class Ticket extends CommonDBTM
             $ticket->getFromDB($params['id_ticket']);
             Session::addMessageAfterRedirect(
                 __(
-                    "Successful transfer for ticket n° : ",
+                    "Successful transfer for ticket",
                     "transferticketentity"
                 ) . $ticket->getLink(),
                 true,
