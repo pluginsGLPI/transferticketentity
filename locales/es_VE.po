@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GLPI Plugin - admincolor\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-24 09:03+0000\n"
-"PO-Revision-Date: 2024-04-16 17:54-0400\n"
+"POT-Creation-Date: 2026-04-27 15:34+0200\n"
+"PO-Revision-Date: 2026-04-27 15:35+0200\n"
 "Last-Translator: \n"
 "Language-Team: English (United Kingdom) (Département de Maine et Loire)\n"
 "Language: es_VE\n"
@@ -19,140 +19,9 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.0.1\n"
+"X-Generator: Poedit 3.0\n"
 
-#: inc/profile.class.php:74 inc/ticket.class.php:48
-msgid "Transfer Ticket Entity"
-msgstr "Transferir Caso a Entidad"
-
-#: inc/profile.class.php:74
-msgid "Change rights"
-msgstr "Cambiar derechos"
-
-#: inc/profile.class.php:77
-msgid "Authorized entity transfer"
-msgstr "Transferencia de entidad autorizada"
-
-#: inc/profile.class.php:89
-msgid "Save"
-msgstr "Guardar"
-
-#: inc/profile.php:50 inc/profile.php:63
-msgid "Item successfully updated"
-msgstr "Elemento actualizado exitosamente"
-
-#: inc/ticket.class.php:210
-msgid "Error, please reload the page."
-msgstr "Error, por favor recarga la página."
-
-#: inc/ticket.class.php:211
-msgid ""
-"If the problem persists, you can try to empty the cache by doing CTRL + F5."
-msgstr ""
-"Si el problema persiste, puedes intentar vaciar el caché presionando CTRL + "
-"F5."
-
-#: inc/ticket.class.php:216
-msgid "Select ticket entity to transfer"
-msgstr "Seleccione la entidad del caso para transferir"
-
-#: inc/ticket.class.php:218
-msgid "Choose your entity"
-msgstr "Elige tu entidad"
-
-#: inc/ticket.class.php:227
-msgid "Select the group to assign"
-msgstr "Seleccione el grupo a asignar"
-
-#: inc/ticket.class.php:229
-msgid "Choose your group"
-msgstr "Elige tu grupo"
-
-#: inc/ticket.class.php:250
-msgid "Confirm transfer ?"
-msgstr "¿Confirmar transferencia?"
-
-#: inc/ticket.class.php:251
-msgid ""
-"Once the transfer has been completed, the ticket will remain visible only if "
-"you have the required rights."
-msgstr ""
-"Una vez completada la transferencia, el caso permanecerá visible sólo si "
-"tienes los derechos requeridos."
-
-#: inc/ticket.class.php:252
-msgid "Cancel"
-msgstr "Anular"
-
-#: inc/ticket.class.php:253 inc/ticket.class.php:244
-msgid "Confirm"
-msgstr "Confirmar"
-
-#: front/ticket.form.php:125
-msgid "Please select a valid entity"
-msgstr "Por favor seleccione una entidad válida"
-
-#: front/ticket.form.php:135
-msgid "Please select a valid group"
-msgstr "Por favor seleccione un grupo válido"
-
-#: front/ticket.form.php:181
-msgid "Escalation to"
-msgstr "Escalamiento a"
-
-#: front/ticket.form.php:181
-msgid "in the group"
-msgstr "en el grupo"
-
-#: front/ticket.form.php:185
-msgid "Successful transfer for ticket n° : "
-msgstr "Transferencia exitosa para el caso n°: "
-
-#: front/ticket.form.php:197
-msgid "Transfer canceled"
-msgstr "Transferencia cancelada"
-
-#: inc/ticket.class.php:266
-msgid "Unauthorized transfer on closed ticket."
-msgstr "Traslado no autorizado en caso cerrado."
-
-#: inc/ticket.class.php:436 front/ticket.form.php:357
-msgid "Please explain your transfer"
-msgstr "Por favor explica tu transferencia"
-
-#: front/ticket.form.php:266
-msgid "You must be assigned to the ticket to be able to transfer it"
-msgstr "Debes estar asignado al caso para poder transferirlo"
-
-#: inc/ticket.class.php:239
-msgid "No entity available found, transfer impossible."
-msgstr "No se encontró ninguna entidad disponible, transferencia imposible."
-
-#: inc/ticket.class.php:305
-msgid "None"
-msgstr "Ninguno"
-
-#: inc/entity.class.php:118
-msgid "Settings Transfer Ticket Entity"
-msgstr "Configuración de entidad de caso de transferencia"
-
-#: inc/entity.class.php:123
-msgid "Assigned group required"
-msgstr "Se requiere grupo asignado"
-
-#: inc/entity.class.php:130
-msgid "Justification required"
-msgstr "Justificación requerida"
-
-#: inc/entity.class.php:137
-msgid "Allow Transfer function"
-msgstr "Permitir función de transferencia"
-
-#: inc/ticket.class.php:322
-msgid "No previous entity"
-msgstr "Ninguna entidad previa"
-
-#: inc/ticket.class.php:342
+#: ajax/showentitygroups.php:62
 msgid ""
 "No group found with « Assigned to » right while a group is required. "
 "Transfer impossible."
@@ -160,44 +29,157 @@ msgstr ""
 "No se encontró ningún grupo con el derecho «Asignado a» mientras se requiere "
 "un grupo. Transferencia imposible."
 
-#: inc/profile.class.php:45
-msgid "Active"
-msgstr "Activo"
+#: front/entity.form.php:56
+msgid "The category is mandatory in the ticket template assigned to the entity"
+msgstr ""
+"The category is mandatory in the ticket template assigned to the entity"
 
-#: inc/profile.class.php:47
+#: front/ticket.form.php:43 src/Ticket.php:519
+msgid "Please select a valid entity"
+msgstr "Por favor seleccione una entidad válida"
+
+#: src/Entity.php:159 src/Profile.php:75 src/Ticket.php:390
+msgid "Transfer Ticket Entity"
+msgstr "Transferir Caso a Entidad"
+
+#: src/Profile.php:124
+msgid "Authorized entity transfer"
+msgstr "Transferencia de entidad autorizada"
+
+#: src/Profile.php:131
 msgid ""
 "Transfer authorized without assignment of technician or associated group"
 msgstr "Traspaso autorizado sin asignación de técnico o grupo asociado"
 
-#: inc/entity.class.php:153
-msgid "Keep category after transfer"
-msgstr "Mantener categoría después de la transferencia"
+#: src/Ticket.php:144 src/Ticket.php:507
+msgid "You must be assigned to the ticket to be able to transfer it"
+msgstr "Debes estar asignado al caso para poder transferirlo"
 
-#: inc/ticket.class.php:448
-msgid ""
-"Warning, category will be reset if it does not exist in the target entity."
-msgstr ""
-"Advertencia, la categoría se restablecerá si no existe en la entidad de "
-"destino."
-
-#: inc/ticket.class.php:303
+#: src/Ticket.php:156
 msgid ""
 "You don't have right to update tickets. Please contact your administrator."
 msgstr ""
 "No tienes derecho a actualizar casos. Por favor contacte a su administrador."
 
-#: inc/ticket.class.php:405
-msgid "optional"
-msgstr "opcional"
+#: src/Ticket.php:166
+msgid "No entity available found, transfer impossible."
+msgstr "No se encontró ninguna entidad disponible, transferencia imposible."
 
-#: inc/entity.class.php:219
-msgid "Default category"
-msgstr "Categoría predeterminada"
+#: src/Ticket.php:177
+msgid "Unauthorized transfer on closed ticket."
+msgstr "Traslado no autorizado en caso cerrado."
 
-#: front/ticket.form.php:266
+#: src/Ticket.php:473
+msgid "Please explain your transfer"
+msgstr "Por favor explica tu transferencia"
+
+#: src/Ticket.php:490 src/Ticket.php:531
+msgid "Please select a valid group"
+msgstr "Por favor seleccione un grupo válido"
+
+#: src/Ticket.php:576
 msgid ""
 "Category will be set to null but its configured as mandatory in GLPIs "
 "template, please contact your administrator."
 msgstr ""
 "La categoría se establecerá como nula pero está configurada como obligatoria "
 "en la plantilla GLPI; comuníquese con su administrador."
+
+#: src/Ticket.php:637
+msgid "in the group"
+msgstr "en el grupo"
+
+#: src/Ticket.php:647
+msgid "Escalation to"
+msgstr "Escalamiento a"
+
+#: src/Ticket.php:656
+#| msgid "Successful transfer for ticket n° : "
+msgid "Successful transfer for ticket"
+msgstr "Successful transfer for ticket"
+
+#~ msgid "Change rights"
+#~ msgstr "Cambiar derechos"
+
+#~ msgid "Save"
+#~ msgstr "Guardar"
+
+#~ msgid "Item successfully updated"
+#~ msgstr "Elemento actualizado exitosamente"
+
+#~ msgid "Error, please reload the page."
+#~ msgstr "Error, por favor recarga la página."
+
+#~ msgid ""
+#~ "If the problem persists, you can try to empty the cache by doing CTRL + "
+#~ "F5."
+#~ msgstr ""
+#~ "Si el problema persiste, puedes intentar vaciar el caché presionando CTRL "
+#~ "+ F5."
+
+#~ msgid "Select ticket entity to transfer"
+#~ msgstr "Seleccione la entidad del caso para transferir"
+
+#~ msgid "Choose your entity"
+#~ msgstr "Elige tu entidad"
+
+#~ msgid "Select the group to assign"
+#~ msgstr "Seleccione el grupo a asignar"
+
+#~ msgid "Choose your group"
+#~ msgstr "Elige tu grupo"
+
+#~ msgid "Confirm transfer ?"
+#~ msgstr "¿Confirmar transferencia?"
+
+#~ msgid ""
+#~ "Once the transfer has been completed, the ticket will remain visible only "
+#~ "if you have the required rights."
+#~ msgstr ""
+#~ "Una vez completada la transferencia, el caso permanecerá visible sólo si "
+#~ "tienes los derechos requeridos."
+
+#~ msgid "Cancel"
+#~ msgstr "Anular"
+
+#~ msgid "Confirm"
+#~ msgstr "Confirmar"
+
+#~ msgid "Transfer canceled"
+#~ msgstr "Transferencia cancelada"
+
+#~ msgid "None"
+#~ msgstr "Ninguno"
+
+#~ msgid "Settings Transfer Ticket Entity"
+#~ msgstr "Configuración de entidad de caso de transferencia"
+
+#~ msgid "Assigned group required"
+#~ msgstr "Se requiere grupo asignado"
+
+#~ msgid "Justification required"
+#~ msgstr "Justificación requerida"
+
+#~ msgid "Allow Transfer function"
+#~ msgstr "Permitir función de transferencia"
+
+#~ msgid "No previous entity"
+#~ msgstr "Ninguna entidad previa"
+
+#~ msgid "Active"
+#~ msgstr "Activo"
+
+#~ msgid "Keep category after transfer"
+#~ msgstr "Mantener categoría después de la transferencia"
+
+#~ msgid ""
+#~ "Warning, category will be reset if it does not exist in the target entity."
+#~ msgstr ""
+#~ "Advertencia, la categoría se restablecerá si no existe en la entidad de "
+#~ "destino."
+
+#~ msgid "optional"
+#~ msgstr "opcional"
+
+#~ msgid "Default category"
+#~ msgstr "Categoría predeterminada"

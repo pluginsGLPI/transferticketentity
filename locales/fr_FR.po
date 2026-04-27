@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GLPI Plugin - Entity Ticket Transfer\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-08 16:11+0100\n"
-"PO-Revision-Date: 2026-03-08 16:12+0100\n"
+"POT-Creation-Date: 2026-04-27 15:34+0200\n"
+"PO-Revision-Date: 2026-04-27 15:35+0200\n"
 "Last-Translator: Yannick Comba, 2022,2023\n"
 "Language-Team: French (France) (Département de Maine et Loire)\n"
 "Language: fr_FR\n"
@@ -21,7 +21,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 3.0\n"
 
-#: ajax/showentitygroups.php:59
+#: ajax/showentitygroups.php:62
 msgid ""
 "No group found with « Assigned to » right while a group is required. "
 "Transfer impossible."
@@ -29,118 +29,58 @@ msgstr ""
 "Aucun groupe avec le droit « Assigné à » n'a été trouvé alors qu'un groupe "
 "est requis. Transfert impossible."
 
-#: front/entity.form.php:57 inc/entity.class.php:245
+#: front/entity.form.php:56
 msgid "The category is mandatory in the ticket template assigned to the entity"
 msgstr ""
 "La catégorie est obligatoire dans le gabarit de ticket affecté à l'entité"
 
-#: front/ticket.form.php:41 inc/ticket.class.php:566
+#: front/ticket.form.php:43 src/Ticket.php:519
 msgid "Please select a valid entity"
 msgstr "Veuillez sélectionner une entité valide"
 
-#: inc/entity.class.php:117 inc/profile.class.php:68 inc/profile.class.php:126
-#: inc/ticket.class.php:436
+#: src/Entity.php:159 src/Profile.php:75 src/Ticket.php:390
 msgid "Transfer Ticket Entity"
 msgstr "Transfert d'entité"
 
-#: inc/entity.class.php:175
-msgid "Settings Transfer Ticket Entity"
-msgstr "Paramètres Transfert d'entité"
-
-#: inc/entity.class.php:180
-msgid "Allow Transfer function"
-msgstr "Autoriser la fonction Transfert"
-
-#: inc/entity.class.php:193
-msgid "Assigned group required"
-msgstr "Groupe à assigner obligatoire"
-
-#: inc/entity.class.php:206
-msgid "Justification required"
-msgstr "Justification obligatoire"
-
-#: inc/entity.class.php:219
-msgid "Keep category after transfer"
-msgstr "Catégorie à conserver après le transfert"
-
-#: inc/entity.class.php:232
-msgid "Default category"
-msgstr "Catégorie par défaut"
-
-#: inc/profile.class.php:150
+#: src/Profile.php:124
 msgid "Authorized entity transfer"
 msgstr "Transfert d'entité autorisé"
 
-#: inc/profile.class.php:157
+#: src/Profile.php:131
 msgid ""
 "Transfer authorized without assignment of technician or associated group"
 msgstr "Transfert autorisé sans affectation du technicien ou groupe associé"
 
-#: inc/ticket.class.php:103 inc/ticket.class.php:554
+#: src/Ticket.php:144 src/Ticket.php:507
 msgid "You must be assigned to the ticket to be able to transfer it"
 msgstr ""
 "Vous devez être assigné sur le ticket ou être membre du groupe assigné pour "
 "être autorisé à le transférer"
 
-#: inc/ticket.class.php:115
+#: src/Ticket.php:156
 msgid ""
 "You don't have right to update tickets. Please contact your administrator."
 msgstr ""
 "Vous n'avez pas le droit de mettre à jour les tickets. Veuillez contacter "
 "votre administrateur."
 
-#: inc/ticket.class.php:125
+#: src/Ticket.php:166
 msgid "No entity available found, transfer impossible."
 msgstr "Aucune entité disponible trouvée, transfert impossible."
 
-#: inc/ticket.class.php:136
+#: src/Ticket.php:177
 msgid "Unauthorized transfer on closed ticket."
 msgstr "Transfert non autorisé sur ticket clos."
 
-#: inc/ticket.class.php:152
-msgid "Transfer the ticket"
-msgstr "Transférer le ticket"
-
-#: inc/ticket.class.php:160
-msgid ""
-"Once the transfer has been completed, the ticket will remain visible only if "
-"you have the required rights."
-msgstr ""
-"Une fois le transfert effectué, le ticket restera visible uniquement si vous "
-"avez les droits requis."
-
-#: inc/ticket.class.php:166
-msgid "Select ticket entity to transfer"
-msgstr "Sélectionnez l'entité vers laquelle migrer le ticket"
-
-#: inc/ticket.class.php:215
-msgid "Select the group to assign"
-msgstr "Sélectionnez le groupe à assigner"
-
-#: inc/ticket.class.php:230
-msgid "Justification"
-msgstr "Justification"
-
-#: inc/ticket.class.php:246
-msgid ""
-"Warning, category will be reset if it does not exist in the target entity."
-msgstr ""
-"Attention, la catégorie sera remise à nulle si non existante dans l'entité "
-"cible."
-
-#: inc/ticket.class.php:256
-msgid "Confirm"
-msgstr "Confirmer"
-
-#: inc/ticket.class.php:520
+#: src/Ticket.php:473
 msgid "Please explain your transfer"
 msgstr "Veuillez expliquer la raison de votre transfert"
 
-#: inc/ticket.class.php:537 inc/ticket.class.php:578
+#: src/Ticket.php:490 src/Ticket.php:531
 msgid "Please select a valid group"
 msgstr "Veuillez sélectionner un groupe valide"
 
-#: inc/ticket.class.php:623
+#: src/Ticket.php:576
 msgid ""
 "Category will be set to null but its configured as mandatory in GLPIs "
 "template, please contact your administrator."
@@ -148,17 +88,63 @@ msgstr ""
 "La catégorie va être remise à nulle mais est configurée comme obligatoire "
 "dans les templates de GLPI, veuillez contacter votre administrateur."
 
-#: inc/ticket.class.php:681
+#: src/Ticket.php:637
 msgid "in the group"
 msgstr "dans le groupe"
 
-#: inc/ticket.class.php:691
+#: src/Ticket.php:647
 msgid "Escalation to"
 msgstr "Escalade vers"
 
-#: inc/ticket.class.php:700
-msgid "Successful transfer for ticket n° : "
-msgstr "Transfert réussi pour le ticket n° : "
+#: src/Ticket.php:656
+msgid "Successful transfer for ticket"
+msgstr "Transfert réussi pour le ticket"
+
+#~ msgid "Settings Transfer Ticket Entity"
+#~ msgstr "Paramètres Transfert d'entité"
+
+#~ msgid "Allow Transfer function"
+#~ msgstr "Autoriser la fonction Transfert"
+
+#~ msgid "Assigned group required"
+#~ msgstr "Groupe à assigner obligatoire"
+
+#~ msgid "Justification required"
+#~ msgstr "Justification obligatoire"
+
+#~ msgid "Keep category after transfer"
+#~ msgstr "Catégorie à conserver après le transfert"
+
+#~ msgid "Default category"
+#~ msgstr "Catégorie par défaut"
+
+#~ msgid "Transfer the ticket"
+#~ msgstr "Transférer le ticket"
+
+#~ msgid ""
+#~ "Once the transfer has been completed, the ticket will remain visible only "
+#~ "if you have the required rights."
+#~ msgstr ""
+#~ "Une fois le transfert effectué, le ticket restera visible uniquement si "
+#~ "vous avez les droits requis."
+
+#~ msgid "Select ticket entity to transfer"
+#~ msgstr "Sélectionnez l'entité vers laquelle migrer le ticket"
+
+#~ msgid "Select the group to assign"
+#~ msgstr "Sélectionnez le groupe à assigner"
+
+#~ msgid "Justification"
+#~ msgstr "Justification"
+
+#~ msgid ""
+#~ "Warning, category will be reset if it does not exist in the target entity."
+#~ msgstr ""
+#~ "Attention, la catégorie sera remise à nulle si non existante dans "
+#~ "l'entité cible."
+
+#~ msgid "Confirm"
+#~ msgstr "Confirmer"
 
 #~ msgid "Transfer canceled"
 #~ msgstr "Transfert annulé"
