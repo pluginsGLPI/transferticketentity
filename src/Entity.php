@@ -82,6 +82,7 @@ class Entity extends CommonDBTM
             'allow_transfer',
             'keep_category',
             'itilcategories_id',
+            'log_type',
         ]));
     }
 
@@ -95,6 +96,7 @@ class Entity extends CommonDBTM
             'allow_transfer',
             'keep_category',
             'itilcategories_id',
+            'log_type',
         ]));
     }
 
@@ -201,6 +203,7 @@ class Entity extends CommonDBTM
             $checkRights->fields['allow_transfer'] = 0;
             $checkRights->fields['keep_category'] = 0;
             $checkRights->fields['itilcategories_id'] = 0;
+            $checkRights->fields['log_type'] = 0;
         }
 
         $target = self::getFormURL();
@@ -215,6 +218,10 @@ class Entity extends CommonDBTM
                 'entities_id' => $item->getID(),
                 'availableCategories' => $availableCategories,
                 'checkMandatoryCategory' => $checkMandatoryCategory,
+                'log_type_options' => [
+                    0 => __('Followup', 'transferticketentity'),
+                    1 => __('Task', 'transferticketentity'),
+                ],
             ],
         );
 
@@ -264,6 +271,7 @@ class Entity extends CommonDBTM
             $array['allow_transfer'] = $data['allow_transfer'];
             $array['keep_category'] = $data['keep_category'];
             $array['itilcategories_id'] = $data['itilcategories_id'];
+            $array['log_type'] = $data['log_type'] ?? 0;
         }
 
         return $array;

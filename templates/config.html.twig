@@ -86,6 +86,22 @@ along with Reports. If not, see <http://www.gnu.org/licenses/>.
                         ) }}
 
 
+                        <div class='form-field row col-6 col-sm-6 mb-2'>
+                            <label class='col-form-label col-5 text-xxl-end'>
+                                {{ __('Transfer log type', 'transferticketentity') }}
+                            </label>
+                            <div class='col-7 field-container'>
+                                {% do call('Dropdown::showFromArray', [
+                                    'log_type',
+                                    log_type_options,
+                                    {
+                                        'multiple': false,
+                                        'value': item.fields['log_type']|default(0),
+                                    }
+                                ]) %}
+                            </div>
+                        </div>
+
                         {# Bloc catégorie #}
                         <div id="category_block"
                              class="form-field row col-6 col-sm-6 mb-2 {% if item.fields['keep_category'] != 0 %}d-none{% endif %}">

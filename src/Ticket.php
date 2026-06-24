@@ -42,9 +42,10 @@ use Group;
 use Group_Ticket;
 use Group_User;
 use Html;
-use Planning;
 use Session;
 use Ticket_User;
+use ITILFollowup;
+use Planning;
 use TicketTask;
 use TicketTemplateMandatoryField;
 
@@ -633,26 +634,36 @@ class Ticket extends CommonDBTM
                 }
             }
 
-            $groupText = "<br> <br> $justification";
+            $content = __("Transfer to", "transferticketentity") . " $theEntity";
 
-            if (isset($params['group_choice'])
-                && $params['group_choice'] > 0) {
+            if (!empty($params['group_choice']) && $params['group_choice'] > 0) {
                 $group = new Group();
-                $group->getfromDB($params['group_choice']);
-                $groupText = __("in the group", "transferticketentity") ." ". $group->getName() ."\n <br> <br> $justification";
+                $group->getFromDB($params['group_choice']);
+                $content .= " " . __("in the group", "transferticketentity") . " " . $group->getName();
             }
 
-            // Log the transfer in a task
-            $task = new TicketTask();
-            $task->add([
-                'tickets_id' => $params['id_ticket'],
-                'is_private' => true,
-                'state' => Planning::INFO,
-                'content' => __(
-                    "Transfer to",
-                    "transferticketentity"
-                ) . " $theEntity " . $groupText
-            ]);
+            if (!empty($justification)) {
+                $content .= "<br><br>" . $justification;
+            }
+
+            // Log the transfer as a followup or task depending on entity configuration
+            if (($checkEntityRight['log_type'] ?? 0) == 1) {
+                $task = new TicketTask();
+                $task->add([
+                    'tickets_id' => $params['id_ticket'],
+                    'is_private' => true,
+                    'state'      => Planning::INFO,
+                    'content'    => $content,
+                ]);
+            } else {
+                $followup = new ITILFollowup();
+                $followup->add([
+                    'itemtype'  => \Ticket::class,
+                    'items_id'  => $params['id_ticket'],
+                    'is_private' => true,
+                    'content'   => $content,
+                ]);
+            }
 
             $ticket = new \Ticket();
             $ticket->getFromDB($params['id_ticket']);

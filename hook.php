@@ -55,11 +55,17 @@ function plugin_transferticketentity_install()
             `allow_transfer` BOOLEAN NOT NULL DEFAULT 0,
             `keep_category` BOOLEAN NOT NULL DEFAULT 0,
             `itilcategories_id` INT {$default_key_sign},
+            `log_type` TINYINT NOT NULL DEFAULT 0,
             PRIMARY KEY  (`id`),
             FOREIGN KEY  (`entities_id`) REFERENCES `glpi_entities` (`id`)
             ) ENGINE=InnoDB DEFAULT CHARSET={$default_charset} COLLATE={$default_collation} ROW_FORMAT=DYNAMIC;";
 
         $DB->doQuery($query);
+    }
+
+    if (!$DB->fieldExists('glpi_plugin_transferticketentity_entities_settings', 'log_type')) {
+        $DB->doQuery("ALTER TABLE `glpi_plugin_transferticketentity_entities_settings`
+            ADD COLUMN `log_type` TINYINT NOT NULL DEFAULT 0");
     }
 
     return true;
