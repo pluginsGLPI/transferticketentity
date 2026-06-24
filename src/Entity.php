@@ -219,8 +219,8 @@ class Entity extends CommonDBTM
                 'availableCategories' => $availableCategories,
                 'checkMandatoryCategory' => $checkMandatoryCategory,
                 'log_type_options' => [
-                    0 => __('Followup', 'transferticketentity'),
-                    1 => __('Task', 'transferticketentity'),
+                    0 => _n('Followup', 'Followups', 1),
+                    1 => _n('Task', 'Tasks', 1),
                 ],
             ],
         );
