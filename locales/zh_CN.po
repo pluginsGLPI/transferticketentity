@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-30 16:24+0200\n"
+"POT-Creation-Date: 2026-06-24 09:22+0200\n"
 "PO-Revision-Date: 2026-05-22 06:32+0000\n"
 "Last-Translator: DWXXX, 2026\n"
 "Language-Team: Chinese (China) (https://app.transifex.com/pluginsGLPI/teams/73419/zh_CN/)\n"
@@ -21,11 +21,11 @@ msgstr ""
 "Language: zh_CN\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
-#: templates/config.html.twig:50
+#: templates/config.html.twig:51
 msgid "Allow Transfer function"
 msgstr "允许传输功能"
 
-#: templates/config.html.twig:66
+#: templates/config.html.twig:67
 msgid "Assigned group required"
 msgstr "分配组必填"
 
@@ -33,91 +33,87 @@ msgstr "分配组必填"
 msgid "Authorized entity transfer"
 msgstr "认证实体传输"
 
-#: src/Ticket.php:576
+#: src/Ticket.php:582
 msgid ""
 "Category will be set to null but its configured as mandatory in GLPIs "
 "template, please contact your administrator."
 msgstr "分类将被设置为空，由于GLPI模版已设置其为必填，请联系你的管理员。"
 
-#: templates/ticket.html.twig:145
+#: templates/ticket.html.twig:147
 msgid "Confirm"
 msgstr "确认"
 
-#: templates/config.html.twig:92
+#: templates/config.html.twig:109
 msgid "Default category"
 msgstr "默认分类"
 
-#: src/Ticket.php:647
-msgid "Escalation to"
-msgstr "升级到"
-
-#: templates/ticket.html.twig:117
+#: templates/ticket.html.twig:119
 msgid "Justification"
 msgstr "理由"
 
-#: templates/config.html.twig:73
+#: templates/config.html.twig:74
 msgid "Justification required"
 msgstr "理由必填"
 
-#: templates/config.html.twig:80
+#: templates/config.html.twig:81
 msgid "Keep category after transfer"
 msgstr "传输后保留分类"
 
-#: src/Ticket.php:166
+#: src/Ticket.php:168
 msgid "No entity available found, transfer impossible."
 msgstr "未发现有效的实体，无法传输。"
 
-#: ajax/showentitygroups.php:62
+#: ajax/showentitygroups.php:60
 msgid ""
 "No group found with « Assigned to » right while a group is required. "
 "Transfer impossible."
 msgstr "通过分配到权限未发现组，由于群组必填，无法传输。"
 
-#: templates/ticket.html.twig:50
+#: templates/ticket.html.twig:51
 msgid ""
 "Once the transfer has been completed, the ticket will remain visible only if"
 " you have the required rights."
 msgstr "一旦传输完成，只有你拥有必要的权限时才可查看。"
 
-#: src/Ticket.php:473
+#: src/Ticket.php:480
 msgid "Please explain your transfer"
 msgstr "请解释你的传输"
 
-#: front/ticket.form.php:43 src/Ticket.php:519
+#: front/ticket.form.php:43 src/Ticket.php:526
 msgid "Please select a valid entity"
 msgstr "请选择一个有效的实体"
 
-#: src/Ticket.php:490 src/Ticket.php:531
+#: src/Ticket.php:497 src/Ticket.php:538
 msgid "Please select a valid group"
 msgstr "请选择一个有效的群组"
 
-#: templates/config.html.twig:125 templates/profile.html.twig:35
+#: templates/config.html.twig:142 templates/profile.html.twig:36
 msgctxt "button"
 msgid "Save"
 msgstr "保存"
 
-#: templates/ticket.html.twig:104
+#: templates/ticket.html.twig:106
 msgid "Select the group to assign"
 msgstr "选择组以分配"
 
-#: templates/ticket.html.twig:55
+#: templates/ticket.html.twig:56
 msgid "Select ticket entity to transfer"
 msgstr "选择工单实体以传输"
 
-#: templates/config.html.twig:41
+#: templates/config.html.twig:42
 msgid "Settings Transfer Ticket Entity"
 msgstr "传输工单实体设置"
 
-#: src/Ticket.php:656
+#: src/Ticket.php:672
 msgid "Successful transfer for ticket"
 msgstr "工单传输成功"
 
-#: front/entity.form.php:56 templates/config.html.twig:116
+#: front/entity.form.php:56 templates/config.html.twig:133
 msgid ""
 "The category is mandatory in the ticket template assigned to the entity"
 msgstr "分配到实体的工单模版分类为必填"
 
-#: src/Entity.php:159 src/Profile.php:75 src/Ticket.php:390
+#: src/Entity.php:161 src/Profile.php:75 src/Ticket.php:397
 msgid "Transfer Ticket Entity"
 msgstr "传输工单实体"
 
@@ -126,28 +122,36 @@ msgid ""
 "Transfer authorized without assignment of technician or associated group"
 msgstr "传输认证没有分配技术员或相关群组"
 
-#: templates/ticket.html.twig:43
+#: templates/config.html.twig:91
+msgid "Transfer log type"
+msgstr ""
+
+#: templates/ticket.html.twig:44
 msgid "Transfer the ticket"
 msgstr "传输工单"
 
-#: src/Ticket.php:177
+#: src/Ticket.php:637
+msgid "Transfer to"
+msgstr ""
+
+#: src/Ticket.php:179
 msgid "Unauthorized transfer on closed ticket."
 msgstr "在关闭工单上未授权传输。"
 
-#: templates/ticket.html.twig:137
+#: templates/ticket.html.twig:139
 msgid ""
 "Warning, category will be reset if it does not exist in the target entity."
 msgstr "警告，如果目前实体不存在此分类，其将会被重置。"
 
-#: src/Ticket.php:156
+#: src/Ticket.php:158
 msgid ""
 "You don't have right to update tickets. Please contact your administrator."
 msgstr "你无权更新工单，请联系你的管理员。"
 
-#: src/Ticket.php:144 src/Ticket.php:507
+#: src/Ticket.php:146 src/Ticket.php:514
 msgid "You must be assigned to the ticket to be able to transfer it"
 msgstr "你必须被分配到此工单方可传输它"
 
-#: src/Ticket.php:637
+#: src/Ticket.php:642
 msgid "in the group"
 msgstr "在群组"
