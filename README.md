@@ -1,6 +1,6 @@
 ## Transferticketentity plugin for GLPI
 
-[![License](https://img.shields.io/badge/License-GNU%20v3-blue.svg?style=flat-square)](https://github.com/pluginsGLPI/transferticketentity/blob/master/LICENSE)
+[![License](https://img.shields.io/badge/License-GNU%20GPL%20v3-blue.svg?style=flat-square)](https://github.com/pluginsGLPI/transferticketentity/blob/master/LICENSE)
 [![Translate](https://img.shields.io/badge/Translate-Transifex-cyan)](https://explore.transifex.com/pluginsGLPI/glpi-plugin-transfer-ticket-entity/)
 
 
