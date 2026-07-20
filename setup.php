@@ -1,6 +1,6 @@
 <?php
 
-/*
+/**
  -------------------------------------------------------------------------
  LICENSE
 
@@ -21,27 +21,27 @@
 
  @category  Ticket
  @package   Transferticketentity
- @author    Yannick Comba, Xavier Caillaud, Infotel
+ @author    Yannick Comba, Xavier Caillaud, Infotel, Département de Maine-et-Loire, Ilyasse Mellouk
  @copyright 2015-2026 Transferticketentity team
  @license   AGPL License 3.0 or (at your option) any later version
             https://www.gnu.org/licenses/gpl-3.0.html
  @link      https://github.com/pluginsGLPI/transferticketentity/
  --------------------------------------------------------------------------
- */
+*/
 
-use Glpi\Plugin\Hooks;
 use GlpiPlugin\Transferticketentity\Entity;
 use GlpiPlugin\Transferticketentity\Profile;
 use GlpiPlugin\Transferticketentity\Ticket;
 
 global $CFG_GLPI;
 
-define('PLUGIN_TRANSFERTICKETENTITY_VERSION', '1.2.2');
+define('TRANSFERTICKETENTITY_VERSION', '1.2.0');
 
-if (!defined("PLUGIN_TRANSFERTICKETENTITY_WEBDIR")) {
+if (!defined("PLUGIN_TRANSFERTICKETENTITY_DIR")) {
     $root = $CFG_GLPI['root_doc'] . '/plugins/transferticketentity';
     define("PLUGIN_TRANSFERTICKETENTITY_WEBDIR", $root);
 }
+
 function plugin_init_transferticketentity()
 {
     global $PLUGIN_HOOKS;
@@ -50,38 +50,35 @@ function plugin_init_transferticketentity()
     Plugin::registerClass(Ticket::class, ['addtabon' => 'Ticket']);
     Plugin::registerClass(Entity::class, ['addtabon' => 'Entity']);
 
-    if (isset($_SESSION['glpiactiveprofile'])) {
-        $PLUGIN_HOOKS[Hooks::CHANGE_PROFILE]['transferticketentity'] = [Profile::class, 'initProfile'];
-    }
+    $PLUGIN_HOOKS['change_profile']['transferticketentity'] = [Profile::class, 'initProfile'];
 
     Plugin::registerClass(Profile::class, ['addtabon' => ['Profile']]);
 
-    $PLUGIN_HOOKS[Hooks::ADD_CSS]['transferticketentity'][] = "css/style.css";
-
+    $PLUGIN_HOOKS['add_css']['transferticketentity'][]        = "css/style.css";
+    $PLUGIN_HOOKS['csrf_compliant']['transferticketentity']    = true;
+    $PLUGIN_HOOKS['use_massive_action']['transferticketentity'] = 1;
 }
 
 function plugin_version_transferticketentity()
 {
-
     return [
-        'name'           => 'TransferTicketEntity',
-        'version'        => PLUGIN_TRANSFERTICKETENTITY_VERSION,
-        'author'         => 'Yannick COMBA & <a href="https://blogglpi.infotel.com">Infotel</a>',
-        'license'        => 'GPLv3+',
-        'homepage'       => 'https://github.com/InfotelGLPI/transferticketentity',
-        'requirements'   => [
+        'name'         => 'TransferTicketEntity',
+        'version'      => TRANSFERTICKETENTITY_VERSION,
+        'author'         => 'Département de Maine et Loire & Y.COMBA & I.MELLOUK',
+        'license'      => 'GPLv3+',
+        'homepage'     => 'https://github.com/InfotelGLPI/transferticketentity',
+        'requirements' => [
             'glpi' => [
                 'min' => '11.0',
                 'max' => '12.0',
                 'dev' => false,
             ],
-        ]];
+        ],
+    ];
 }
-
 
 function plugin_transferticketentity_options()
 {
-
     return [
         Plugin::OPTION_AUTOINSTALL_DISABLED => true,
     ];

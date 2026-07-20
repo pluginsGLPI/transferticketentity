@@ -1,31 +1,30 @@
 {#
--------------------------------------------------------------------------
-LICENSE
-
-This file is part of Transferticketentity plugin for GLPI.
-
-Transferticketentity is free software: you can redistribute it and/or modify
-it under the terms of the GNU Affero General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-Transferticketentity is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-GNU Affero General Public License for more details.
-
-You should have received a copy of the GNU Affero General Public License
-along with Reports. If not, see <http://www.gnu.org/licenses/>.
-
-@category  Ticket
-@package   Transferticketentity
-@author    Yannick Comba, Xavier Caillaud, Infotel
-@copyright 2015-2026 Transferticketentity team
-@license   AGPL License 3.0 or (at your option) any later version
-           https://www.gnu.org/licenses/gpl-3.0.html
-@link      https://github.com/pluginsGLPI/transferticketentity/
---------------------------------------------------------------------------
- #}
+# -------------------------------------------------------------------------
+# Transferticketentity plugin for GLPI
+# -------------------------------------------------------------------------
+#
+# LICENSE
+#
+# This file is part of Transferticketentity.
+#
+# Transferticketentity is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
+#
+# Transferticketentity is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with Transferticketentity. If not, see <http://www.gnu.org/licenses/>.
+# -------------------------------------------------------------------------
+# @copyright Copyright (C) 2026-2026 by Transferticketentity plugin team.
+# @license   GPLv2 https://www.gnu.org/licenses/gpl-2.0.html
+# @link      https://github.com/InfotelGLPI/Transferticketentity
+# -------------------------------------------------------------------------
+#}
 
 {% import "components/form/fields_macros.html.twig" as fields %}
 {% set field_options = {'label_class': 'col-5', 'input_class': 'col-7', 'full_width': false} %}
@@ -39,6 +38,7 @@ along with Reports. If not, see <http://www.gnu.org/licenses/>.
             <div class="card-header">
                 <input type="hidden" name="_glpi_csrf_token" value="{{ csrf_token() }}">
                 <input type="hidden" name="id_ticket" value="{{ id_ticket }}">
+                <input type="hidden" name="id_user" value="{{ id_user }}">
                 <input type="hidden" name="entities_id" value="{{ entities_id }}">
                 <h3 class="card-title">
                     {{ __('Transfer the ticket', 'transferticketentity') }} - {{ entities_name }}
@@ -51,6 +51,7 @@ along with Reports. If not, see <http://www.gnu.org/licenses/>.
                         {{ __('Once the transfer has been completed, the ticket will remain visible only if you have the required rights.', 'transferticketentity') }}
                     </p>
 
+                    {# Entity selector #}
                     <div class='form-field row align-items-center col-12 col-sm-12 mb-2 tt_entity_choice'>
                         <label class='col-form-label col-xxl-5 text-xxl-end' for='entity_choice'>
                             {{ __("Select ticket entity to transfer","transferticketentity") }}
@@ -100,25 +101,23 @@ along with Reports. If not, see <http://www.gnu.org/licenses/>.
                         </div>
                     </div>
 
-                    {% if group_required is defined and group_required is true %}
-                        <div class='form-field row align-items-center col-12 col-sm-12 mb-2'>
-                            <label class='col-form-label col-xxl-5 text-xxl-end' for='group_choice'>
-                                {{ __("Select the group to assign", "transferticketentity") }}
-                                <span id='showmandatorygroup'>
-                                            </span>
-                            </label>
-                            <div class='col-xxl-7 field-container'>
-                                        <span id='show_entitygroup'>
-                                        </span>
-                            </div>
+                    {# Group selector #}
+                    <div class='form-field row align-items-center col-12 col-sm-12 mb-2'>
+                        <label class='col-form-label col-xxl-5 text-xxl-end' for='group_choice'>
+                            {{ __("Select the group to assign", "transferticketentity") }}
+                            <span id='showmandatorygroup'></span>
+                        </label>
+                        <div class='col-xxl-7 field-container'>
+                            <span id='show_entitygroup'></span>
                         </div>
-                    {% endif %}
+                    </div>
+
+                    {# Justification #}
                     <div class='form-field row align-items-start col-12 col-sm-12 mb-2'>
                         <label class='col-form-label col-xxl-5 text-xxl-end' for='justification'
                                style='vertical-align: middle;'>
                             {{ __("Justification", "transferticketentity") }}
-                            <span id='showmandatoryjustification'>
-                                        </span>
+                            <span id='showmandatoryjustification'></span>
                         </label>
                         <div class='col-xxl-7 field-container'>
                             {{ fields.textareaField(
@@ -131,7 +130,23 @@ along with Reports. If not, see <http://www.gnu.org/licenses/>.
                                     'field_class' : "col-12",
                                 }
                             ) }}
+                        </div>
+                    </div>
 
+                    {# Add as observer checkbox #}
+                    <div class='form-field row align-items-center col-12 col-sm-12 mb-2'>
+                        <div class='col-xxl-5'></div>
+                        <div class='col-xxl-7 field-container'>
+                            <div class="form-check">
+                                <input class="form-check-input"
+                                       type="checkbox"
+                                       id="add_as_observer"
+                                       name="add_as_observer"
+                                       value="1">
+                                <label class="form-check-label fw-bold" for="add_as_observer">
+                                    {{ __('Add myself as observer', 'transferticketentity') }}
+                                </label>
+                            </div>
                         </div>
                     </div>
 

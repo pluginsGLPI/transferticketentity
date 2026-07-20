@@ -1,32 +1,32 @@
 <?php
 
-/*
- -------------------------------------------------------------------------
- LICENSE
-
- This file is part of Transferticketentity plugin for GLPI.
-
- Transferticketentity is free software: you can redistribute it and/or modify
- it under the terms of the GNU Affero General Public License as published by
- the Free Software Foundation, either version 3 of the License, or
- (at your option) any later version.
-
- Transferticketentity is distributed in the hope that it will be useful,
- but WITHOUT ANY WARRANTY; without even the implied warranty of
- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- GNU Affero General Public License for more details.
-
- You should have received a copy of the GNU Affero General Public License
- along with Reports. If not, see <http://www.gnu.org/licenses/>.
-
- @category  Ticket
- @package   Transferticketentity
- @author    Yannick Comba, Xavier Caillaud, Infotel
- @copyright 2015-2026 Transferticketentity team
- @license   AGPL License 3.0 or (at your option) any later version
-            https://www.gnu.org/licenses/gpl-3.0.html
- @link      https://github.com/pluginsGLPI/transferticketentity/
- --------------------------------------------------------------------------
+/**
+ * -------------------------------------------------------------------------
+ * LICENSE
+ *
+ * This file is part of Transferticketentity plugin for GLPI.
+ *
+ * Transferticketentity is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Transferticketentity is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with Reports. If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @category  Ticket
+ * @package   Transferticketentity
+ * @author    Yannick Comba, Xavier Caillaud, Infotel, Département de Maine-et-Loire, Ilyasse Mellouk
+ * @copyright 2015-2026 Transferticketentity team
+ * @license   AGPL License 3.0 or (at your option) any later version
+ * https://www.gnu.org/licenses/gpl-3.0.html
+ * @link      https://github.com/pluginsGLPI/transferticketentity/
+ * --------------------------------------------------------------------------
  */
 
 namespace GlpiPlugin\Transferticketentity;
@@ -68,9 +68,8 @@ class Profile extends \Profile
      */
     public function getTabNameForItem(CommonGLPI $item, $withtemplate = 0)
     {
-
         if ($item->getType() == 'Profile'
-                   && $item->fields['interface'] == 'central'
+            && $item->fields['interface'] == 'central'
         ) {
             return self::createTabEntry(__("Transfer Ticket Entity", "transferticketentity"));
         }
@@ -113,36 +112,45 @@ class Profile extends \Profile
     /**
      * Get all rights
      *
-     * @param  $all
-     *
      * @return array
      */
     public static function getAllRights()
     {
+        $rights = [];
 
-        $rights[] = ['itemtype' => Entity::class,
+        $rights[] = [
+            'itemtype' => Entity::class,
             'label'    => __('Authorized entity transfer', 'transferticketentity'),
             'field'    => 'plugin_transferticketentity_use',
-            'rights' => [
-                READ  => __('Read'),
-            ],];
+            'rights'   => [
+                READ => __('Read'),
+            ],
+        ];
 
-        $rights[] = ['itemtype' => Entity::class,
+        $rights[] = [
+            'itemtype' => Entity::class,
             'label'    => __('Transfer authorized without assignment of technician or associated group', 'transferticketentity'),
             'field'    => 'plugin_transferticketentity_bypass',
-            'rights' => [
-                READ  => __('Read'),
-            ],];
+            'rights'   => [
+                READ => __('Read'),
+            ],
+        ];
 
+        $rights[] = [
+            'itemtype' => Entity::class,
+            'label'    => __('Mass transfer authorized', 'transferticketentity'),
+            'field'    => 'plugin_transferticketentity_massive',
+            'rights'   => [
+                READ => __('Read'),
+            ],
+        ];
 
         return $rights;
     }
 
     /**
      * Init profiles
-     *
      **/
-
     public static function translateARight($old_right)
     {
         switch ($old_right) {
@@ -181,10 +189,10 @@ class Profile extends \Profile
         }
 
         $it = $DB->request([
-            'FROM' => 'glpi_profilerights',
+            'FROM'  => 'glpi_profilerights',
             'WHERE' => [
                 'profiles_id' => $_SESSION['glpiactiveprofile']['id'],
-                'name' => ['LIKE', '%plugin_transferticketentity%'],
+                'name'        => ['LIKE', '%plugin_transferticketentity%'],
             ],
         ]);
         foreach ($it as $prof) {
@@ -197,9 +205,10 @@ class Profile extends \Profile
      */
     public static function createFirstAccess($profiles_id)
     {
-
-        $rights = ['plugin_transferticketentity_use' => READ,
-            'plugin_transferticketentity_bypass' => READ,
+        $rights = [
+            'plugin_transferticketentity_use'     => READ,
+            'plugin_transferticketentity_bypass'  => READ,
+            'plugin_transferticketentity_massive' => READ,
         ];
 
         self::addDefaultProfileInfos(
@@ -210,7 +219,9 @@ class Profile extends \Profile
     }
 
     /**
-     * @param $profile
+     * @param $profiles_id
+     * @param $rights
+     * @param bool $drop_existing
      **/
     public static function addDefaultProfileInfos($profiles_id, $rights, $drop_existing = false)
     {
@@ -219,15 +230,13 @@ class Profile extends \Profile
         foreach ($rights as $right => $value) {
             if ($dbu->countElementsInTable(
                 'glpi_profilerights',
-                ["profiles_id" => $profiles_id,
-                    "name"        => $right]
+                ["profiles_id" => $profiles_id, "name" => $right]
             ) && $drop_existing) {
                 $profileRight->deleteByCriteria(['profiles_id' => $profiles_id, 'name' => $right]);
             }
             if (!$dbu->countElementsInTable(
                 'glpi_profilerights',
-                ["profiles_id" => $profiles_id,
-                    "name"        => $right]
+                ["profiles_id" => $profiles_id, "name" => $right]
             )) {
                 $myright['profiles_id'] = $profiles_id;
                 $myright['name']        = $right;
