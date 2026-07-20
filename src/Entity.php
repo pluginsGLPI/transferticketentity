@@ -69,14 +69,35 @@ class Entity extends CommonDBTM
     }
 
     /**
-     * If category belong to ancestor, return it
+     * Keep only known fields before adding in database
      *
+     * @param array $input
      * @return array
      */
-    public function availableCategories()
+    public function prepareInputForAdd($input)
+    {
+        $allowed = [
+            'entities_id',
+            'allow_entity_only_transfer',
+            'justification_transfer',
+            'allow_transfer',
+            'keep_category',
+            'itilcategories_id',
+        ];
+
+        return array_intersect_key($input, array_flip($allowed));
+    }
+    
+    /**
+     * If category belong to ancestor, return it
+     *
+     * @param int|null $entities_id
+     * @return array
+     */
+    public function availableCategories(?int $entities_id = null)
     {
         global $DB;
-        $entity = $_REQUEST['id'];
+        $entity = $entities_id ?? (int) ($_REQUEST['id'] ?? 0);
         $allItilCategories = [0 => Dropdown::EMPTY_VALUE];
 
         $result = $DB->request([
