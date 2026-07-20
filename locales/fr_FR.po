@@ -1,71 +1,27 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-# 
+#
 # Translators:
-# Xavier CAILLAUD <thetsmr@gmail.com>, 2026
-# 
-#, fuzzy
+# Yannick Comba <y.comba@maine-et-loire.fr>, 2022
+# Yannick Comba, 2022,2023
+# Département de Maine et Loire
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
+"Project-Id-Version: GLPI Plugin - Entity Ticket Transfer\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-24 09:22+0200\n"
-"PO-Revision-Date: 2026-05-22 06:32+0000\n"
-"Last-Translator: Xavier CAILLAUD <thetsmr@gmail.com>, 2026\n"
-"Language-Team: French (France) (https://app.transifex.com/pluginsGLPI/teams/73419/fr_FR/)\n"
+"POT-Creation-Date: 2026-03-08 16:11+0100\n"
+"PO-Revision-Date: 2026-03-08 16:12+0100\n"
+"Last-Translator: Yannick Comba, 2022,2023\n"
+"Language-Team: French (France) (Département de Maine et Loire)\n"
+"Language: fr_FR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: fr_FR\n"
-"Plural-Forms: nplurals=3; plural=(n == 0 || n == 1) ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 3.0\n"
 
-#: templates/config.html.twig:51
-msgid "Allow Transfer function"
-msgstr "Autoriser la fonction Transfert"
-
-#: templates/config.html.twig:67
-msgid "Assigned group required"
-msgstr "Groupe à assigner obligatoire"
-
-#: src/Profile.php:124
-msgid "Authorized entity transfer"
-msgstr "Transfert d'entité autorisé"
-
-#: src/Ticket.php:582
-msgid ""
-"Category will be set to null but its configured as mandatory in GLPIs "
-"template, please contact your administrator."
-msgstr ""
-"La catégorie va être remise à nulle mais est configurée comme obligatoire "
-"dans les templates de GLPI, veuillez contacter votre administrateur."
-
-#: templates/ticket.html.twig:147
-msgid "Confirm"
-msgstr "Confirmer"
-
-#: templates/config.html.twig:109
-msgid "Default category"
-msgstr "Catégorie par défaut"
-
-#: templates/ticket.html.twig:119
-msgid "Justification"
-msgstr "Justification"
-
-#: templates/config.html.twig:74
-msgid "Justification required"
-msgstr "Justification obligatoire"
-
-#: templates/config.html.twig:81
-msgid "Keep category after transfer"
-msgstr "Catégorie à conserver après le transfert"
-
-#: src/Ticket.php:168
-msgid "No entity available found, transfer impossible."
-msgstr "Aucune entité disponible trouvée, transfert impossible."
-
-#: ajax/showentitygroups.php:60
+#: ajax/showentitygroups.php:59
 msgid ""
 "No group found with « Assigned to » right while a group is required. "
 "Transfer impossible."
@@ -73,98 +29,190 @@ msgstr ""
 "Aucun groupe avec le droit « Assigné à » n'a été trouvé alors qu'un groupe "
 "est requis. Transfert impossible."
 
-#: templates/ticket.html.twig:51
-msgid ""
-"Once the transfer has been completed, the ticket will remain visible only if"
-" you have the required rights."
-msgstr ""
-"Une fois le transfert effectué, le ticket restera visible uniquement si vous"
-" avez les droits requis."
+#: front/entity.form.php:57 inc/entity.class.php:245
 
-#: src/Ticket.php:480
-msgid "Please explain your transfer"
-msgstr "Veuillez expliquer la raison de votre transfert"
-
-#: front/ticket.form.php:43 src/Ticket.php:526
-msgid "Please select a valid entity"
-msgstr "Veuillez sélectionner une entité valide"
-
-#: src/Ticket.php:497 src/Ticket.php:538
-msgid "Please select a valid group"
-msgstr "Veuillez sélectionner un groupe valide"
-
-#: templates/config.html.twig:142 templates/profile.html.twig:36
-msgctxt "button"
-msgid "Save"
-msgstr "Sauver"
-
-#: templates/ticket.html.twig:106
-msgid "Select the group to assign"
-msgstr "Sélectionnez le groupe à assigner"
-
-#: templates/ticket.html.twig:56
-msgid "Select ticket entity to transfer"
-msgstr "Sélectionnez l'entité vers laquelle migrer le ticket"
-
-#: templates/config.html.twig:42
-msgid "Settings Transfer Ticket Entity"
-msgstr "Paramètres Transfert d'entité"
-
-#: src/Ticket.php:672
-msgid "Successful transfer for ticket"
-msgstr "Transfert réussi pour le ticket"
-
-#: front/entity.form.php:56 templates/config.html.twig:133
 msgid ""
 "The category is mandatory in the ticket template assigned to the entity"
 msgstr ""
 "La catégorie est obligatoire dans le gabarit de ticket affecté à l'entité"
 
-#: src/Entity.php:161 src/Profile.php:75 src/Ticket.php:397
+msgid "Please select a valid entity"
+msgstr "Veuillez sélectionner une entité valide"
+
 msgid "Transfer Ticket Entity"
 msgstr "Transfert d'entité"
 
-#: src/Profile.php:131
+msgid "Settings Transfer Ticket Entity"
+msgstr "Paramètres Transfert d'entité"
+
+msgid "Allow Transfer function"
+msgstr "Autoriser la fonction Transfert"
+
+msgid "Assigned group required"
+msgstr "Groupe à assigner obligatoire"
+
+msgid "Justification required"
+msgstr "Justification obligatoire"
+
+msgid "Keep category after transfer"
+msgstr "Catégorie à conserver après le transfert"
+
+msgid "Default category"
+msgstr "Catégorie par défaut"
+
+msgid "Authorized entity transfer"
+msgstr "Transfert d'entité autorisé"
+
+msgid "You must be assigned to the ticket to be able to transfer it"
+msgstr ""
+"Vous devez être assigné sur le ticket ou être membre du groupe assigné pour être autorisé à le transférer"
+
+msgid "No entity available found, transfer impossible."
+msgstr "Aucune entité disponible trouvée, transfert impossible."
+
+msgid "Unauthorized transfer on closed ticket."
+msgstr "Transfert non autorisé sur ticket clos."
+
+msgid "Transfer the ticket"
+msgstr "Transférer le ticket"
+
+msgid "Select ticket entity to transfer"
+msgstr "Sélectionnez l'entité vers laquelle migrer le ticket"
+
+msgid "Select the group to assign"
+msgstr "Sélectionnez le groupe à assigner"
+
+msgid "Justification"
+msgstr "Justification"
+
+msgid "Confirm"
+msgstr "Confirmer"
+
+msgid "Please explain your transfer"
+msgstr "Veuillez expliquer la raison de votre transfert"
+
+msgid "Please select a valid group"
+msgstr "Veuillez sélectionner un groupe valide"
+
+msgid "in the group"
+msgstr "dans le groupe"
+
+msgid "Escalation to"
+msgstr "Escalade vers"
+
+msgid "Successful transfer for ticket n° : "
+msgstr "Transfert réussi pour le ticket n° : "
+
+msgid "Change rights"
+msgstr "Modifier les droits"
+
+msgid "Save"
+msgstr "Sauvegarder"
+
+msgid "Item successfully updated"
+msgstr "Élément modifié"
+
+msgid "Error, please reload the page."
+msgstr "Erreur, veuillez recharger la page."
+
+msgid ""
+"If the problem persists, you can try to empty the cache by doing CTRL + F5."
+msgstr ""
+"Si le problème persiste, vous pouvez tenter de vider le cache en faisant CTRL + F5."
+
+msgid "Choose your entity"
+msgstr "Choisissez votre entité"
+
+msgid "Choose your group"
+msgstr "Choisissez votre groupe"
+
+msgid "Confirm transfer ?"
+msgstr "Confirmer le transfert ?"
+
+msgid ""
+"Once the transfer has been completed, the ticket will remain visible only if you have the required rights."
+msgstr ""
+"Une fois le transfert effectué, le ticket restera visible uniquement si vous avez les droits requis."
+
+msgid "Cancel"
+msgstr "Annuler"
+
+msgid "Transfer canceled"
+msgstr "Transfert annulé"
+
+msgid "You must be assigned to ticket ID %d to transfer it."
+msgstr "Vous devez être assigné au ticket ID %d pour le transférer."
+
+msgid "None"
+msgstr "Aucun"
+
+msgid "No previous entity"
+msgstr "Pas de précédente entité"
+
+
+msgid "Active"
+msgstr "Actif"
+
 msgid ""
 "Transfer authorized without assignment of technician or associated group"
 msgstr "Transfert autorisé sans affectation du technicien ou groupe associé"
 
-#: templates/config.html.twig:91
-msgid "Transfer log type"
-msgstr "Type de journal de transfert"
-
-#: templates/ticket.html.twig:44
-msgid "Transfer the ticket"
-msgstr "Transférer le ticket"
-
-#: src/Ticket.php:637
-msgid "Transfer to"
-msgstr "Transféré vers"
-
-#: src/Ticket.php:179
-msgid "Unauthorized transfer on closed ticket."
-msgstr "Transfert non autorisé sur ticket clos."
-
-#: templates/ticket.html.twig:139
 msgid ""
 "Warning, category will be reset if it does not exist in the target entity."
 msgstr ""
-"Attention, la catégorie sera remise à nulle si non existante dans l'entité "
-"cible."
+"Attention, la catégorie sera remise à nulle si non existante dans l'entité cible."
 
-#: src/Ticket.php:158
 msgid ""
 "You don't have right to update tickets. Please contact your administrator."
 msgstr ""
-"Vous n'avez pas le droit de mettre à jour les tickets. Veuillez contacter "
-"votre administrateur."
+"Vous n'avez pas le droit de mettre à jour les tickets. Veuillez contacter votre administrateur."
 
-#: src/Ticket.php:146 src/Ticket.php:514
-msgid "You must be assigned to the ticket to be able to transfer it"
+msgid "optional"
+msgstr "facultatif"
+
+msgid "Transfer to another entity"
+msgstr "Transférer vers une autre entité"
+
+msgid "Massive transfer authorized"
+msgstr "Transfert en masse autorisé"
+
+msgid "Failed to transfer ticket ID %d"
+msgstr "Failed to transfer ticket ID %d"
+
+msgid ""
+"Category will be set to null but its configured as mandatory in GLPIs template, please contact your administrator."
 msgstr ""
-"Vous devez être assigné sur le ticket ou être membre du groupe assigné pour "
-"être autorisé à le transférer"
+"La catégorie va être remise à null mais est configurée comme obligatoire dans les templates de GLPI, veuillez contacter votre administrateur."
 
-#: src/Ticket.php:642
-msgid "in the group"
+msgid "Choose an entity"
+msgstr "Choisissez une entité"
+
+msgid "Add myself as observer"
+msgstr "S'ajouter comme observateur"
+
+msgid "Target entity"
+msgstr "Entité cible"
+
+msgid "Group to assign"
+msgstr "Groupe à assigner"
+
+msgid "Unauthorized transfer for closed or resolved tickets."
+msgstr "Transfert non autorisé pour les tickets fermés ou résolus."
+
+msgid "Escalate to"
+msgstr "Escalade vers"
+
+msgid "in group"
 msgstr "dans le groupe"
+
+msgid "Transfer"
+msgstr "Transférer"
+
+msgid "Escalation to %s"
+msgstr "Transféré vers %s"
+
+msgid "No group"
+msgstr "Aucun groupe"
+
+msgid "Mass transfer authorized"
+msgstr "Transfert en masse autorisé"
