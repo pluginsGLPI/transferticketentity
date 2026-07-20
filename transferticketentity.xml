@@ -18,10 +18,12 @@
       <issues>https://github.com/pluginsGLPI/transferticketentity/issues</issues>
       <readme>https://raw.githubusercontent.com/pluginsGLPI/transferticketentity/master/README.md</readme>
       <authors>
-         <author>D&#xE9;partement de Maine-et-Loire</author>
-         <author>Y.COMBA</author>
-         <author>I.MELLOUK</author>
-      </authors>
+    <author>Xavier CAILLAUD</author>
+      <author>Infotel</author>
+      <author>Département de Maine-et-Loire</author>
+      <author>Yannick COMBA</author>
+      <author>Ilyasse MELLOUK</author>
+   </authors>
     <versions>
         <version>
             <num>1.2.0</num>

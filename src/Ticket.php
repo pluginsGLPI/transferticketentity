@@ -20,11 +20,11 @@
  *
  * @category  Ticket
  * @package   Transferticketentity
- * @author    Département de Maine et Loire, Y.COMBA, I.MELLOUK
- * @copyright 2015-2023 Département de Maine et Loire plugin team
+ * @author    Yannick Comba, Xavier Caillaud, Infotel, Département de Maine-et-Loire, Ilyasse Mellouk
+ * @copyright 2015-2026 Transferticketentity team
  * @license   AGPL License 3.0 or (at your option) any later version
  * https://www.gnu.org/licenses/gpl-3.0.html
- * @link      https://github.com/departement-maine-et-loire/
+ * @link      https://github.com/pluginsGLPI/transferticketentity/
  * --------------------------------------------------------------------------
  */
 
