@@ -41,9 +41,15 @@ class ProfileTest extends DbTestCase
         $this->assertNotEmpty(Profile::getTypeName(1));
     }
 
-    public function testGetAllRightsReturnsTwoEntries(): void
+    public function testGetAllRightsReturnsThreeEntries(): void
     {
-        $this->assertCount(2, Profile::getAllRights());
+        $this->assertCount(3, Profile::getAllRights());
+    }
+
+    public function testGetAllRightsContainsMassiveField(): void
+    {
+        $fields = array_column(Profile::getAllRights(), 'field');
+        $this->assertContains('plugin_transferticketentity_massive', $fields);
     }
 
     public function testGetAllRightsContainsUseField(): void
