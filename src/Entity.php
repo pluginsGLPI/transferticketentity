@@ -1,32 +1,32 @@
 <?php
 
-/*
- -------------------------------------------------------------------------
- LICENSE
-
- This file is part of Transferticketentity plugin for GLPI.
-
- Transferticketentity is free software: you can redistribute it and/or modify
- it under the terms of the GNU Affero General Public License as published by
- the Free Software Foundation, either version 3 of the License, or
- (at your option) any later version.
-
- Transferticketentity is distributed in the hope that it will be useful,
- but WITHOUT ANY WARRANTY; without even the implied warranty of
- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- GNU Affero General Public License for more details.
-
- You should have received a copy of the GNU Affero General Public License
- along with Reports. If not, see <http://www.gnu.org/licenses/>.
-
- @category  Ticket
- @package   Transferticketentity
- @author    Yannick Comba, Xavier Caillaud, Infotel
- @copyright 2015-2026 Transferticketentity team
- @license   AGPL License 3.0 or (at your option) any later version
-            https://www.gnu.org/licenses/gpl-3.0.html
- @link      https://github.com/pluginsGLPI/transferticketentity/
- --------------------------------------------------------------------------
+/**
+ * -------------------------------------------------------------------------
+ * LICENSE
+ *
+ * This file is part of Transferticketentity plugin for GLPI.
+ *
+ * Transferticketentity is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Transferticketentity is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with Reports. If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @category  Ticket
+ * @package   Transferticketentity
+ * @author    Département de Maine et Loire, Y.COMBA, I.MELLOUK
+ * @copyright 2015-2023 Département de Maine et Loire plugin team
+ * @license   AGPL License 3.0 or (at your option) any later version
+ * https://www.gnu.org/licenses/gpl-3.0.html
+ * @link      https://github.com/departement-maine-et-loire/
+ * --------------------------------------------------------------------------
  */
 
 namespace GlpiPlugin\Transferticketentity;
@@ -73,37 +73,10 @@ class Entity extends CommonDBTM
      *
      * @return array
      */
-    public function prepareInputForAdd($input)
-    {
-        return array_intersect_key($input, array_flip([
-            'entities_id',
-            'allow_entity_only_transfer',
-            'justification_transfer',
-            'allow_transfer',
-            'keep_category',
-            'itilcategories_id',
-            'log_type',
-        ]));
-    }
-
-    public function prepareInputForUpdate($input)
-    {
-        return array_intersect_key($input, array_flip([
-            'id',
-            'entities_id',
-            'allow_entity_only_transfer',
-            'justification_transfer',
-            'allow_transfer',
-            'keep_category',
-            'itilcategories_id',
-            'log_type',
-        ]));
-    }
-
-    public function availableCategories(int $entity_id)
+    public function availableCategories()
     {
         global $DB;
-        $entity = $entity_id;
+        $entity = $_REQUEST['id'];
         $allItilCategories = [0 => Dropdown::EMPTY_VALUE];
 
         $result = $DB->request([
@@ -192,7 +165,7 @@ class Entity extends CommonDBTM
         $checkRights = new self();
         $checkRights->getFromDBByCrit(['entities_id' => $item->getID()]);
 
-        $availableCategories = self::availableCategories($item->getID());
+        $availableCategories = self::availableCategories();
 
         $params['entity_choice'] = $item->getID();
         $checkMandatoryCategory = Ticket::checkMandatoryCategory($params);
@@ -203,7 +176,6 @@ class Entity extends CommonDBTM
             $checkRights->fields['allow_transfer'] = 0;
             $checkRights->fields['keep_category'] = 0;
             $checkRights->fields['itilcategories_id'] = 0;
-            $checkRights->fields['log_type'] = 0;
         }
 
         $target = self::getFormURL();
@@ -218,10 +190,6 @@ class Entity extends CommonDBTM
                 'entities_id' => $item->getID(),
                 'availableCategories' => $availableCategories,
                 'checkMandatoryCategory' => $checkMandatoryCategory,
-                'log_type_options' => [
-                    0 => _n('Followup', 'Followups', 1),
-                    1 => _n('Task', 'Tasks', 1),
-                ],
             ],
         );
 
@@ -271,7 +239,6 @@ class Entity extends CommonDBTM
             $array['allow_transfer'] = $data['allow_transfer'];
             $array['keep_category'] = $data['keep_category'];
             $array['itilcategories_id'] = $data['itilcategories_id'];
-            $array['log_type'] = $data['log_type'] ?? 0;
         }
 
         return $array;

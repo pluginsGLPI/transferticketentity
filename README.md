@@ -1,9 +1,3 @@
-## Transferticketentity plugin for GLPI
-
-[![License](https://img.shields.io/badge/License-GNU%20GPL%20v3-blue.svg?style=flat-square)](https://github.com/pluginsGLPI/transferticketentity/blob/master/LICENSE)
-[![Translate](https://img.shields.io/badge/Translate-Transifex-cyan)](https://explore.transifex.com/pluginsGLPI/glpi-plugin-transfer-ticket-entity/)
-
-
 # GLPi Transfer Ticket Entity Plugin (FR)
 
 ## Introduction
@@ -43,7 +37,9 @@ Pour configurer les prérequis du transfert d'entité :
 Vous pouvez configurer les droits d'accès au plugin dans l'administration des profils.
 Les prérequis du transfert se gèrent dans l'administration des entités.
 
+## Compatibilité
 
+Ce plugin a été testé jusqu'à la version de GLPI 10.0.14
 
 # GLPi Transfer Ticket Entity Plugin (EN)
 
@@ -84,3 +80,6 @@ To configure entity transfer prerequisites :
 You can configure access rights to the plugin in profile administration.
 The transfer prerequisites are managed in the entity administration.
 
+## Compatibility
+
+This plugin has been tested up to GLPI version 10.0.14

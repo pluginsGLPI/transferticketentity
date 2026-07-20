@@ -1,14 +1,14 @@
 # SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
+# Copyright (C) YEAR Transferticketentity Development Team
+# This file is distributed under the same license as the GLPI - Transferticketentity plugin package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
+"Project-Id-Version: GLPI - Transferticketentity plugin 1.1.4\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-25 04:08+0000\n"
+"POT-Creation-Date: 2026-03-08 16:11+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,131 +17,128 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: templates/ticket.html.twig
+#: ajax/showentitygroups.php:59
+msgid ""
+"No group found with « Assigned to » right while a group is required. "
+"Transfer impossible."
+msgstr ""
+
+#: front/entity.form.php:57 inc/entity.class.php:245
+msgid "The category is mandatory in the ticket template assigned to the entity"
+msgstr ""
+
+#: front/ticket.form.php:41 inc/ticket.class.php:566
+msgid "Please select a valid entity"
+msgstr ""
+
+#: inc/entity.class.php:117 inc/profile.class.php:68 inc/profile.class.php:126
+#: inc/ticket.class.php:436
+msgid "Transfer Ticket Entity"
+msgstr ""
+
+#: inc/entity.class.php:175
+msgid "Settings Transfer Ticket Entity"
+msgstr ""
+
+#: inc/entity.class.php:180
+msgid "Allow Transfer function"
+msgstr ""
+
+#: inc/entity.class.php:193
+msgid "Assigned group required"
+msgstr ""
+
+#: inc/entity.class.php:206
+msgid "Justification required"
+msgstr ""
+
+#: inc/entity.class.php:219
+msgid "Keep category after transfer"
+msgstr ""
+
+#: inc/entity.class.php:232
+msgid "Default category"
+msgstr ""
+
+#: inc/profile.class.php:150
+msgid "Authorized entity transfer"
+msgstr ""
+
+#: inc/profile.class.php:157
+msgid ""
+"Transfer authorized without assignment of technician or associated group"
+msgstr ""
+
+#: inc/ticket.class.php:103 inc/ticket.class.php:554
+msgid "You must be assigned to the ticket to be able to transfer it"
+msgstr ""
+
+#: inc/ticket.class.php:115
+msgid ""
+"You don't have right to update tickets. Please contact your administrator."
+msgstr ""
+
+#: inc/ticket.class.php:125
+msgid "No entity available found, transfer impossible."
+msgstr ""
+
+#: inc/ticket.class.php:136
+msgid "Unauthorized transfer on closed ticket."
+msgstr ""
+
+#: inc/ticket.class.php:152
 msgid "Transfer the ticket"
 msgstr ""
 
-#: templates/ticket.html.twig
+#: inc/ticket.class.php:160
 msgid ""
 "Once the transfer has been completed, the ticket will remain visible only if "
 "you have the required rights."
 msgstr ""
 
-#: templates/ticket.html.twig
+#: inc/ticket.class.php:166
 msgid "Select ticket entity to transfer"
 msgstr ""
 
-#: templates/ticket.html.twig
+#: inc/ticket.class.php:215
 msgid "Select the group to assign"
 msgstr ""
 
-#: templates/ticket.html.twig
+#: inc/ticket.class.php:230
 msgid "Justification"
 msgstr ""
 
-#: templates/ticket.html.twig
+#: inc/ticket.class.php:246
 msgid ""
 "Warning, category will be reset if it does not exist in the target entity."
 msgstr ""
 
-#: templates/ticket.html.twig
+#: inc/ticket.class.php:256
 msgid "Confirm"
 msgstr ""
 
-#: templates/config.html.twig
-msgid "Settings Transfer Ticket Entity"
-msgstr ""
-
-#: templates/config.html.twig
-msgid "Allow Transfer function"
-msgstr ""
-
-#: templates/config.html.twig
-msgid "Assigned group required"
-msgstr ""
-
-#: templates/config.html.twig
-msgid "Justification required"
-msgstr ""
-
-#: templates/config.html.twig
-msgid "Keep category after transfer"
-msgstr ""
-
-#: templates/config.html.twig
-msgid "Transfer log type"
-msgstr ""
-
-#: templates/config.html.twig
-msgid "Default category"
-msgstr ""
-
-#: templates/config.html.twig front/entity.form.php:56
-msgid "The category is mandatory in the ticket template assigned to the entity"
-msgstr ""
-
-#: front/ticket.form.php:43 src/Ticket.php:526
-msgid "Please select a valid entity"
-msgstr ""
-
-#: src/Profile.php:75 src/Entity.php:161 src/Ticket.php:397
-msgid "Transfer Ticket Entity"
-msgstr ""
-
-#: src/Profile.php:124
-msgid "Authorized entity transfer"
-msgstr ""
-
-#: src/Profile.php:131
-msgid ""
-"Transfer authorized without assignment of technician or associated group"
-msgstr ""
-
-#: src/Ticket.php:146 src/Ticket.php:514
-msgid "You must be assigned to the ticket to be able to transfer it"
-msgstr ""
-
-#: src/Ticket.php:158
-msgid ""
-"You don't have right to update tickets. Please contact your administrator."
-msgstr ""
-
-#: src/Ticket.php:168
-msgid "No entity available found, transfer impossible."
-msgstr ""
-
-#: src/Ticket.php:179
-msgid "Unauthorized transfer on closed ticket."
-msgstr ""
-
-#: src/Ticket.php:480
+#: inc/ticket.class.php:520
 msgid "Please explain your transfer"
 msgstr ""
 
-#: src/Ticket.php:497 src/Ticket.php:538
+#: inc/ticket.class.php:537 inc/ticket.class.php:578
 msgid "Please select a valid group"
 msgstr ""
 
-#: src/Ticket.php:582
+#: inc/ticket.class.php:623
 msgid ""
 "Category will be set to null but its configured as mandatory in GLPIs "
 "template, please contact your administrator."
 msgstr ""
 
-#: src/Ticket.php:637
-msgid "Transfer to"
-msgstr ""
-
-#: src/Ticket.php:642
+#: inc/ticket.class.php:681
 msgid "in the group"
 msgstr ""
 
-#: src/Ticket.php:672
-msgid "Successful transfer for ticket"
+#: inc/ticket.class.php:691
+msgid "Escalation to"
 msgstr ""
 
-#: ajax/showentitygroups.php:60
-msgid ""
-"No group found with « Assigned to » right while a group is required. "
-"Transfer impossible."
+#: inc/ticket.class.php:700
+msgid "Successful transfer for ticket n° : "
 msgstr ""

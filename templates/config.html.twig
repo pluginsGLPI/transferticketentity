@@ -1,31 +1,30 @@
 {#
--------------------------------------------------------------------------
-LICENSE
-
-This file is part of Transferticketentity plugin for GLPI.
-
-Transferticketentity is free software: you can redistribute it and/or modify
-it under the terms of the GNU Affero General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-Transferticketentity is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-GNU Affero General Public License for more details.
-
-You should have received a copy of the GNU Affero General Public License
-along with Reports. If not, see <http://www.gnu.org/licenses/>.
-
-@category  Ticket
-@package   Transferticketentity
-@author    Yannick Comba, Xavier Caillaud, Infotel
-@copyright 2015-2026 Transferticketentity team
-@license   AGPL License 3.0 or (at your option) any later version
-           https://www.gnu.org/licenses/gpl-3.0.html
-@link      https://github.com/pluginsGLPI/transferticketentity/
---------------------------------------------------------------------------
- #}
+# -------------------------------------------------------------------------
+# Transferticketentity plugin for GLPI
+# -------------------------------------------------------------------------
+#
+# LICENSE
+#
+# This file is part of Transferticketentity.
+#
+# Transferticketentity is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
+#
+# Transferticketentity is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with Transferticketentity. If not, see <http://www.gnu.org/licenses/>.
+# -------------------------------------------------------------------------
+# @copyright Copyright (C) 2026-2026 by Transferticketentity plugin team.
+# @license   GPLv2 https://www.gnu.org/licenses/gpl-2.0.html
+# @link      https://github.com/InfotelGLPI/Transferticketentity
+# -------------------------------------------------------------------------
+#}
 
 {% import "components/form/fields_macros.html.twig" as fields %}
 {% set field_options = {'label_class': 'col-5', 'input_class': 'col-7', 'full_width': false} %}
@@ -86,22 +85,6 @@ along with Reports. If not, see <http://www.gnu.org/licenses/>.
                         ) }}
 
 
-                        <div class='form-field row col-6 col-sm-6 mb-2'>
-                            <label class='col-form-label col-5 text-xxl-end'>
-                                {{ __('Transfer log type', 'transferticketentity') }}
-                            </label>
-                            <div class='col-7 field-container'>
-                                {% do call('Dropdown::showFromArray', [
-                                    'log_type',
-                                    log_type_options,
-                                    {
-                                        'multiple': false,
-                                        'value': item.fields['log_type']|default(0),
-                                    }
-                                ]) %}
-                            </div>
-                        </div>
-
                         {# Bloc catégorie #}
                         <div id="category_block"
                              class="form-field row col-6 col-sm-6 mb-2 {% if item.fields['keep_category'] != 0 %}d-none{% endif %}">
@@ -146,5 +129,23 @@ along with Reports. If not, see <http://www.gnu.org/licenses/>.
             </div>
         </div>
     </form>
-    <script src="{{ config('root_doc') }}/plugins/transferticketentity/js/config.js"></script>
+    <script>
+        function see_params(value) {
+            const block = document.getElementById("transfer_params");
+            if (value == 1) {
+                block.classList.remove("d-none");
+            } else {
+                block.classList.add("d-none");
+            }
+        }
+
+        function see_category(value) {
+            const block = document.getElementById("category_block");
+            if (value == 0) {
+                block.classList.remove("d-none");
+            } else {
+                block.classList.add("d-none");
+            }
+        }
+    </script>
 {% endif %}
