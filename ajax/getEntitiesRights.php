@@ -34,7 +34,7 @@ use GlpiPlugin\Transferticketentity\Entity;
 header("Content-Type: application/json; charset=UTF-8");
 Html::header_nocache();
 
-Session::checkLoginUser();
+Session::checkRight('plugin_transferticketentity_use', READ);
 
 $getEntitiesRights = Entity::getEntitiesRights();
 

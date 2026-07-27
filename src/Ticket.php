@@ -204,7 +204,7 @@ class Ticket extends CommonDBTM
                 'root_plugin' => PLUGIN_TRANSFERTICKETENTITY_WEBDIR,
                 'action' => $target,
                 'id_ticket' => $ticket->getID(),
-                'entities_id' => $ticket->getID(),
+                'entities_id' => $ticket->fields['entities_id'],
                 'entities_name' => $entity->getName(),
                 'entities' => $entities_selection,
                 'group_required' => $group_required,
@@ -454,6 +454,18 @@ class Ticket extends CommonDBTM
     public function launchTicketTransfer($params)
     {
         global $CFG_GLPI;
+
+        // Enforce the real UPDATE authorization on the SOURCE ticket before any write.
+        // The plugin READ right and checkAssign() alone are not enough to gate a mutation
+        // that changes the ticket entity, status and actors: a forged POST could otherwise
+        // reach this path. can($id, UPDATE) also verifies the ticket belongs to an entity
+        // the user can access, which closes the cross-entity IDOR reachable through the
+        // "bypass" right. This intentionally guards the SOURCE ticket only: a technician is
+        // still allowed to transfer INTO a target entity they do not manage (feature intent).
+        $source_ticket = new \Ticket();
+        if (!$source_ticket->can((int) ($params['id_ticket'] ?? 0), UPDATE)) {
+            throw new \Glpi\Exception\Http\AccessDeniedHttpException();
+        }
 
         $checkAssign = self::checkAssign($params);
         $checkEntity = self::checkEntityETT();

@@ -45,7 +45,7 @@ along with Reports. If not, see <http://www.gnu.org/licenses/>.
 
             <div class="card-body">
                 <div class="row">
-                    {{ fields.dropdownYesNo(
+                    {{ fields.sliderField(
                         'allow_transfer',
                         item.fields['allow_transfer'],
                         __('Allow Transfer function', 'transferticketentity'),
@@ -61,21 +61,21 @@ along with Reports. If not, see <http://www.gnu.org/licenses/>.
                      class="{% if item.fields['allow_transfer'] != 1 %}d-none{% endif %}">
                     <div class="row">
 
-                        {{ fields.dropdownYesNo(
+                        {{ fields.sliderField(
                             'allow_entity_only_transfer',
                             item.fields['allow_entity_only_transfer'],
                             __('Assigned group required', 'transferticketentity'),
                             field_options
                         ) }}
 
-                        {{ fields.dropdownYesNo(
+                        {{ fields.sliderField(
                             'justification_transfer',
                             item.fields['justification_transfer'],
                             __('Justification required', 'transferticketentity'),
                             field_options
                         ) }}
 
-                        {{ fields.dropdownYesNo(
+                        {{ fields.sliderField(
                             'keep_category',
                             item.fields['keep_category']|default(1),
                             __('Keep category after transfer', 'transferticketentity'),

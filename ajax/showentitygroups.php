@@ -29,9 +29,10 @@
  --------------------------------------------------------------------------
  */
 
+use Glpi\Exception\Http\AccessDeniedHttpException;
 use GlpiPlugin\Transferticketentity\Ticket;
 
-Session::checkLoginUser();
+Session::checkRight('plugin_transferticketentity_use', READ);
 
 if (strpos($_SERVER['PHP_SELF'], "showentitygroups.php")) {
     header("Content-Type: text/html; charset=UTF-8");
@@ -41,7 +42,16 @@ if (strpos($_SERVER['PHP_SELF'], "showentitygroups.php")) {
 }
 
 if (isset($_POST['entity_selection'])) {
-    $entitites_id = $_POST['entity_selection'];
+    $entitites_id = (int) $_POST['entity_selection'];
+
+    // Only authorized transfer targets (allow_transfer = 1) may be queried here.
+    // Without this check any technician holding the plugin READ right could enumerate
+    // the assignable group names of arbitrary entities outside their scope. Transfer
+    // targets are intentionally NOT restricted by haveAccessToEntity(): the feature
+    // must allow transferring a ticket into an entity the technician does not manage.
+    if (!in_array($entitites_id, array_map('intval', Ticket::checkEntityETT()), true)) {
+        throw new AccessDeniedHttpException();
+    }
 
     $getGroupEntities = Ticket::getGroupEntities($entitites_id);
 
