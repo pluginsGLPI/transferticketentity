@@ -36,7 +36,7 @@ use GlpiPlugin\Transferticketentity\Ticket;
 
 global $CFG_GLPI;
 
-define('PLUGIN_TRANSFERTICKETENTITY_VERSION', '1.2.2');
+define('PLUGIN_TRANSFERTICKETENTITY_VERSION', '1.2.3');
 
 if (!defined("PLUGIN_TRANSFERTICKETENTITY_WEBDIR")) {
     $root = $CFG_GLPI['root_doc'] . '/plugins/transferticketentity';
