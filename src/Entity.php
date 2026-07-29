@@ -157,6 +157,12 @@ class Entity extends CommonDBTM
      */
     public function getTabNameForItem(CommonGLPI $item, $withtemplate = 0)
     {
+        // Gate the transfer-policy tab on the dedicated plugin right, not just native
+        // "entity" READ: the transfer configuration should only be visible to profiles
+        // actually provisioned for this plugin.
+        if (!Session::haveRight('plugin_transferticketentity_use', READ)) {
+            return '';
+        }
         if ($item->getType() == \Entity::class) {
             return self::createTabEntry(__("Transfer Ticket Entity", "transferticketentity"));
         }
@@ -173,6 +179,11 @@ class Entity extends CommonDBTM
      */
     public static function displayTabContentForItem(CommonGLPI $item, $tabnum = 1, $withtemplate = 0)
     {
+        // Same plugin-right gate as getTabNameForItem: never render the transfer policy
+        // to a profile that only holds native "entity" READ without the plugin right.
+        if (!Session::haveRight('plugin_transferticketentity_use', READ)) {
+            return true;
+        }
         if ($item->getType() == \Entity::class) {
             $entity = new self();
             $entity->showFormMcv($item);

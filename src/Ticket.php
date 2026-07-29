@@ -531,8 +531,9 @@ class Ticket extends CommonDBTM
             );
 
             Html::back();
-        } elseif (!in_array($params['entity_choice'], $checkEntity)) {
-            // Check that the selected entity belongs to those available
+        } elseif (!in_array((int) $params['entity_choice'], array_map('intval', $checkEntity), true)) {
+            // Check that the selected entity belongs to those available (strict, int-cast
+            // comparison mirrors the AJAX endpoints so a "1abc"-style POST cannot match).
             Session::addMessageAfterRedirect(
                 __(
                     "Please select a valid entity",
@@ -544,7 +545,7 @@ class Ticket extends CommonDBTM
 
             Html::back();
         } elseif (!empty($params['group_choice'])
-            && !in_array($params['group_choice'], $checkGroup)) {
+            && !in_array((int) $params['group_choice'], array_map('intval', $checkGroup), true)) {
             Session::addMessageAfterRedirect(
                 __(
                     "Please select a valid group",
