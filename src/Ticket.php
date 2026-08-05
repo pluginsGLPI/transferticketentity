@@ -322,8 +322,7 @@ class Ticket extends CommonDBTM
         global $DB;
 
         $id_ticket = $params['id_ticket'];
-        $targetEntity = $params['entity_choice'];
-
+        $targetEntity = (int) $params['entity_choice'];
 
         $result = $DB->request([
             'SELECT' => 'itilcategories_id',
@@ -331,10 +330,13 @@ class Ticket extends CommonDBTM
             'WHERE' => ['id' => $id_ticket]
         ]);
 
-        $getTicketCategory = '';
-
+        $ticketCategoryId = 0;
         foreach ($result as $data) {
-            $getTicketCategory = $data['itilcategories_id'];
+            $ticketCategoryId = (int) $data['itilcategories_id'];
+        }
+
+        if ($ticketCategoryId === 0) {
+            return false;
         }
 
         $result = $DB->request([
@@ -342,43 +344,38 @@ class Ticket extends CommonDBTM
             'WHERE' => ['id' => $targetEntity]
         ]);
 
-        $ancestorsEntities = [];
-
+        $visibleEntities = [];
         foreach ($result as $data) {
-            if ($data['ancestors_cache']) {
-                $ancestorsEntities = $data['ancestors_cache'];
-                $ancestorsEntities = json_decode($ancestorsEntities, true);
-                array_push($ancestorsEntities, $targetEntity);
-            } else {
-                array_push($ancestorsEntities, 0);
+            if (!empty($data['ancestors_cache'])) {
+                $decoded = json_decode($data['ancestors_cache'], true);
+                if (is_array($decoded)) {
+                    $visibleEntities = array_map('intval', array_values($decoded));
+                }
             }
         }
+        $visibleEntities[] = $targetEntity;
 
         $result = $DB->request([
             'FROM' => 'glpi_itilcategories',
-            'WHERE' => ['id' => $getTicketCategory]
+            'WHERE' => ['id' => $ticketCategoryId]
         ]);
 
-
-        $getEntitiesFromCategoryTicket = '';
-        $isRecursiveCategory = '';
-
+        $categoryEntity = null;
+        $isRecursive = false;
         foreach ($result as $data) {
-            $getEntitiesFromCategoryTicket = $data['entities_id'];
-            $isRecursiveCategory = $data['is_recursive'];
+            $categoryEntity = (int) $data['entities_id'];
+            $isRecursive = (bool) $data['is_recursive'];
         }
 
-        if (!$isRecursiveCategory) {
-            if ($getEntitiesFromCategoryTicket == $targetEntity) {
-                $isRecursiveCategory = true;
-            }
-        }
-
-        if (in_array($getEntitiesFromCategoryTicket, $ancestorsEntities) && $isRecursiveCategory) {
-            return true;
-        } else {
+        if ($categoryEntity === null) {
             return false;
         }
+
+        if ($categoryEntity === $targetEntity) {
+            return true;
+        }
+
+        return $isRecursive && in_array($categoryEntity, $visibleEntities, true);
     }
 
 
