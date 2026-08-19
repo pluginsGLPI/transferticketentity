@@ -124,7 +124,7 @@ msgstr "传输认证没有分配技术员或相关群组"
 
 #: templates/config.html.twig:91
 msgid "Transfer log type"
-msgstr ""
+msgstr "传输日志类型"
 
 #: templates/ticket.html.twig:44
 msgid "Transfer the ticket"
@@ -132,7 +132,7 @@ msgstr "传输工单"
 
 #: src/Ticket.php:637
 msgid "Transfer to"
-msgstr ""
+msgstr "传输到"
 
 #: src/Ticket.php:179
 msgid "Unauthorized transfer on closed ticket."
