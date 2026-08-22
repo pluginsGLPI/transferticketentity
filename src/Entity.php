@@ -1,5 +1,34 @@
 <?php
 
+/**
+ * -------------------------------------------------------------------------
+ * LICENSE
+ *
+ * This file is part of Transferticketentity plugin for GLPI.
+ *
+ * Transferticketentity is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Transferticketentity is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with Reports. If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @author    Yannick Comba, Xavier Caillaud, Infotel
+ * @category  Ticket
+ * @copyright 2015-2026 Transferticketentity team
+ * @license   AGPL License 3.0 or (at your option) any later version
+ * @link      https://github.com/pluginsGLPI/transferticketentity/
+ * @package   Transferticketentity
+ *            https://www.gnu.org/licenses/gpl-3.0.html
+ * --------------------------------------------------------------------------
+ */
+
 /*
  -------------------------------------------------------------------------
  LICENSE
@@ -75,7 +104,7 @@ class Entity extends CommonDBTM
      */
     public function prepareInputForAdd($input)
     {
-        return array_intersect_key($input, array_flip([
+        $input = array_intersect_key($input, array_flip([
             'entities_id',
             'allow_entity_only_transfer',
             'justification_transfer',
@@ -84,11 +113,13 @@ class Entity extends CommonDBTM
             'itilcategories_id',
             'log_type',
         ]));
+
+        return $this->sanitizeCategoryScope($input, (int) ($input['entities_id'] ?? 0));
     }
 
     public function prepareInputForUpdate($input)
     {
-        return array_intersect_key($input, array_flip([
+        $input = array_intersect_key($input, array_flip([
             'id',
             'entities_id',
             'allow_entity_only_transfer',
@@ -98,6 +129,36 @@ class Entity extends CommonDBTM
             'itilcategories_id',
             'log_type',
         ]));
+
+        // The entity of the edited row is pinned by the controller; never trust a
+        // posted entities_id here for the category scope check.
+        $entities_id = (int) ($this->fields['entities_id'] ?? $input['entities_id'] ?? 0);
+
+        return $this->sanitizeCategoryScope($input, $entities_id);
+    }
+
+    /**
+     * Ensure a submitted default category actually belongs to the target entity
+     * scope. Without this, an entity administrator could store the id of a category
+     * owned by another (out-of-scope) entity, which would later be applied to any
+     * ticket transferred into this entity.
+     *
+     * @param array $input
+     * @param int   $entities_id
+     * @return array
+     */
+    private function sanitizeCategoryScope(array $input, int $entities_id): array
+    {
+        if (!array_key_exists('itilcategories_id', $input)) {
+            return $input;
+        }
+
+        $available = $this->availableCategories($entities_id);
+        $input['itilcategories_id'] = array_key_exists((int) $input['itilcategories_id'], $available)
+            ? (int) $input['itilcategories_id']
+            : 0;
+
+        return $input;
     }
 
     public function availableCategories(int $entity_id)
@@ -153,7 +214,7 @@ class Entity extends CommonDBTM
      * @param object $item Entity
      * @param int $withtemplate 0
      *
-     * @return "Entity ticket transfer"
+     * @return string
      */
     public function getTabNameForItem(CommonGLPI $item, $withtemplate = 0)
     {
@@ -243,6 +304,10 @@ class Entity extends CommonDBTM
     {
         global $DB;
 
+        // Restrict the returned policy rows to the caller's entity scope (recursive):
+        // without this, any holder of the plugin "use" right could enumerate the
+        // transfer policy of every entity of the instance, including entities outside
+        // their perimeter.
         $result = $DB->request([
             'SELECT' => [
                 'entities_id',
@@ -251,7 +316,8 @@ class Entity extends CommonDBTM
                 'allow_transfer',
                 'keep_category',
             ],
-            'FROM' => 'glpi_plugin_transferticketentity_entities_settings',
+            'FROM' => self::getTable(),
+            'WHERE' => getEntitiesRestrictCriteria(self::getTable(), 'entities_id', '', true),
             'ORDER' => ['entities_id ASC'],
         ]);
 

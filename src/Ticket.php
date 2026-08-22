@@ -1,5 +1,34 @@
 <?php
 
+/**
+ * -------------------------------------------------------------------------
+ * LICENSE
+ *
+ * This file is part of Transferticketentity plugin for GLPI.
+ *
+ * Transferticketentity is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Transferticketentity is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with Reports. If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @author    Yannick Comba, Xavier Caillaud, Infotel
+ * @category  Ticket
+ * @copyright 2015-2026 Transferticketentity team
+ * @license   AGPL License 3.0 or (at your option) any later version
+ * @link      https://github.com/pluginsGLPI/transferticketentity/
+ * @package   Transferticketentity
+ *            https://www.gnu.org/licenses/gpl-3.0.html
+ * --------------------------------------------------------------------------
+ */
+
 /*
  -------------------------------------------------------------------------
  LICENSE
@@ -111,11 +140,14 @@ class Ticket extends CommonDBTM
             'WHERE' => [
                 'is_assign' => 1,
             ],
-            'ORDERBY' => 'name'
+            'ORDERBY' => 'name',
         ];
         $criteria['WHERE'] = $criteria['WHERE'] + getEntitiesRestrictCriteria(
-                'glpi_groups','',$entities, true
-            );
+            'glpi_groups',
+            '',
+            $entities,
+            true,
+        );
 
         $iterator = $DB->request($criteria);
 
@@ -294,11 +326,14 @@ class Ticket extends CommonDBTM
             'WHERE' => [
                 'is_assign' => 1,
             ],
-            'ORDERBY' => 'name'
+            'ORDERBY' => 'name',
         ];
         $criteria['WHERE'] = $criteria['WHERE'] + getEntitiesRestrictCriteria(
-                'glpi_groups','', $entities, true
-            );
+            'glpi_groups',
+            '',
+            $entities,
+            true,
+        );
 
         $iterator = $DB->request($criteria);
 
@@ -328,7 +363,7 @@ class Ticket extends CommonDBTM
         $result = $DB->request([
             'SELECT' => 'itilcategories_id',
             'FROM' => 'glpi_tickets',
-            'WHERE' => ['id' => $id_ticket]
+            'WHERE' => ['id' => $id_ticket],
         ]);
 
         $getTicketCategory = '';
@@ -339,7 +374,7 @@ class Ticket extends CommonDBTM
 
         $result = $DB->request([
             'FROM' => 'glpi_entities',
-            'WHERE' => ['id' => $targetEntity]
+            'WHERE' => ['id' => $targetEntity],
         ]);
 
         $ancestorsEntities = [];
@@ -356,7 +391,7 @@ class Ticket extends CommonDBTM
 
         $result = $DB->request([
             'FROM' => 'glpi_itilcategories',
-            'WHERE' => ['id' => $getTicketCategory]
+            'WHERE' => ['id' => $getTicketCategory],
         ]);
 
 
@@ -388,7 +423,7 @@ class Ticket extends CommonDBTM
      * @param object $item Ticket
      * @param int $withtemplate 0
      *
-     * @return "Entity ticket transfer"
+     * @return string
      */
     public function getTabNameForItem(CommonGLPI $item, $withtemplate = 0)
     {
@@ -490,10 +525,10 @@ class Ticket extends CommonDBTM
                 Session::addMessageAfterRedirect(
                     __(
                         "Please explain your transfer",
-                        'transferticketentity'
+                        'transferticketentity',
                     ),
                     true,
-                    ERROR
+                    ERROR,
                 );
 
                 Html::back();
@@ -507,10 +542,10 @@ class Ticket extends CommonDBTM
             Session::addMessageAfterRedirect(
                 __(
                     "Please select a valid group",
-                    'transferticketentity'
+                    'transferticketentity',
                 ),
                 true,
-                ERROR
+                ERROR,
             );
 
             Html::back();
@@ -524,10 +559,10 @@ class Ticket extends CommonDBTM
             Session::addMessageAfterRedirect(
                 __(
                     "You must be assigned to the ticket to be able to transfer it",
-                    'transferticketentity'
+                    'transferticketentity',
                 ),
                 true,
-                ERROR
+                ERROR,
             );
 
             Html::back();
@@ -537,10 +572,10 @@ class Ticket extends CommonDBTM
             Session::addMessageAfterRedirect(
                 __(
                     "Please select a valid entity",
-                    'transferticketentity'
+                    'transferticketentity',
                 ),
                 true,
-                ERROR
+                ERROR,
             );
 
             Html::back();
@@ -549,10 +584,10 @@ class Ticket extends CommonDBTM
             Session::addMessageAfterRedirect(
                 __(
                     "Please select a valid group",
-                    'transferticketentity'
+                    'transferticketentity',
                 ),
                 true,
-                ERROR
+                ERROR,
             );
 
             Html::back();
@@ -593,10 +628,10 @@ class Ticket extends CommonDBTM
                 Session::addMessageAfterRedirect(
                     __(
                         "Category will be set to null but its configured as mandatory in GLPIs template, please contact your administrator.",
-                        'transferticketentity'
+                        'transferticketentity',
                     ),
                     true,
-                    ERROR
+                    ERROR,
                 );
 
                 Html::back();
@@ -605,7 +640,7 @@ class Ticket extends CommonDBTM
             // Remove the link with the current user
             $delete_link_user = [
                 'tickets_id' => $params['id_ticket'],
-                'type' => CommonITILActor::ASSIGN
+                'type' => CommonITILActor::ASSIGN,
             ];
 
             $ticket_user = new Ticket_User();
@@ -619,7 +654,7 @@ class Ticket extends CommonDBTM
             // Remove the link with the current group
             $delete_link_group = [
                 'tickets_id' => $params['id_ticket'],
-                'type' => CommonITILActor::ASSIGN
+                'type' => CommonITILActor::ASSIGN,
             ];
 
             $group_ticket = new Group_Ticket();
@@ -637,7 +672,7 @@ class Ticket extends CommonDBTM
                 $group_check = [
                     'tickets_id' => $params['id_ticket'],
                     'groups_id' => $params['group_choice'],
-                    'type' => CommonITILActor::ASSIGN
+                    'type' => CommonITILActor::ASSIGN,
                 ];
 
                 if (!$group_ticket->find($group_check)) {
@@ -683,10 +718,10 @@ class Ticket extends CommonDBTM
             Session::addMessageAfterRedirect(
                 __(
                     "Successful transfer for ticket",
-                    "transferticketentity"
+                    "transferticketentity",
                 ) . $ticket->getLink(),
                 true,
-                INFO
+                INFO,
             );
 
             if ($ticket->getID() > 0) {

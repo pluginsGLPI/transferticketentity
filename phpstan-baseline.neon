@@ -19,12 +19,6 @@ parameters:
 			path: ajax/showentitymandatoryjustification.php
 
 		-
-			message: '#^Method GlpiPlugin\\Transferticketentity\\Entity\:\:getTabNameForItem\(\) should return ''Entity ticket…'' but returns ''''\.$#'
-			identifier: return.type
-			count: 1
-			path: src/Entity.php
-
-		-
 			message: '#^PHPDoc tag @param for parameter \$item with type object is not subtype of native type CommonGLPI\.$#'
 			identifier: parameter.phpDocType
 			count: 2
@@ -53,12 +47,6 @@ parameters:
 			identifier: glpi.forbidExit
 			count: 1
 			path: src/Profile.php
-
-		-
-			message: '#^Method GlpiPlugin\\Transferticketentity\\Ticket\:\:getTabNameForItem\(\) should return ''Entity ticket…'' but returns ''''\.$#'
-			identifier: return.type
-			count: 1
-			path: src/Ticket.php
 
 		-
 			message: '#^Method GlpiPlugin\\Transferticketentity\\Ticket\:\:showFormMcv\(\) with return type void returns false but should not return anything\.$#'
