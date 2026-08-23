@@ -5,6 +5,7 @@
 # 
 # Translators:
 # Xavier CAILLAUD <thetsmr@gmail.com>, 2026
+# DWXXX, 2026
 # 
 #, fuzzy
 msgid ""
@@ -13,7 +14,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-24 09:22+0200\n"
 "PO-Revision-Date: 2026-05-22 06:32+0000\n"
-"Last-Translator: Xavier CAILLAUD <thetsmr@gmail.com>, 2026\n"
+"Last-Translator: DWXXX, 2026\n"
 "Language-Team: English (United Kingdom) (https://app.transifex.com/pluginsGLPI/teams/73419/en_GB/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -132,7 +133,7 @@ msgstr ""
 
 #: templates/config.html.twig:91
 msgid "Transfer log type"
-msgstr ""
+msgstr "传输日志类型"
 
 #: templates/ticket.html.twig:44
 msgid "Transfer the ticket"
@@ -140,7 +141,7 @@ msgstr "Transfer the ticket"
 
 #: src/Ticket.php:637
 msgid "Transfer to"
-msgstr ""
+msgstr "传输到"
 
 #: src/Ticket.php:179
 msgid "Unauthorized transfer on closed ticket."
