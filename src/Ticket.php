@@ -686,7 +686,7 @@ class Ticket extends CommonDBTM
 
             $ticket = new \Ticket();
             $ticket->getFromDB($params['id_ticket']);
-            
+
             if ($ticket->can($ticket->getID(), READ)) {
                 Session::addMessageAfterRedirect(
                     __(
@@ -696,7 +696,7 @@ class Ticket extends CommonDBTM
                     true,
                     INFO,
                 );
-                
+
                 if ($ticket->getID() > 0) {
                     Html::redirect($CFG_GLPI["root_doc"] . "/front/ticket.form.php?id=" . (int) $ticket->getID());
                 } else {
