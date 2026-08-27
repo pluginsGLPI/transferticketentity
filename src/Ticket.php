@@ -38,6 +38,7 @@ use CommonITILObject;
 use CommonGLPI;
 use Dropdown;
 use Glpi\Application\View\TemplateRenderer;
+use Glpi\Exception\Http\AccessDeniedHttpException;
 use Group;
 use Group_Ticket;
 use Group_User;
@@ -470,7 +471,7 @@ class Ticket extends CommonDBTM
         // still allowed to transfer INTO a target entity they do not manage (feature intent).
         $source_ticket = new \Ticket();
         if (!$source_ticket->can((int) ($params['id_ticket'] ?? 0), UPDATE)) {
-            throw new \Glpi\Exception\Http\AccessDeniedHttpException();
+            throw new AccessDeniedHttpException();
         }
 
         $checkAssign = self::checkAssign($params);
