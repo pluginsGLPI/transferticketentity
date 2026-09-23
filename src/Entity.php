@@ -38,10 +38,6 @@ use Glpi\Application\View\TemplateRenderer;
 use Html;
 use Session;
 
-if (!defined('GLPI_ROOT')) {
-    die("Sorry. You can't access directly to this file");
-}
-
 class Entity extends CommonDBTM
 {
     public static $rightname = "entity";
@@ -61,9 +57,11 @@ class Entity extends CommonDBTM
 
     public static function getInstance($entities_id)
     {
-        $temp = new self();
-        if ($temp->getFromDBByCrit(['entities_id' => $entities_id])) {
-            return $temp->fields;
+        // find() rather than getFromDBByCrit(): a leftover duplicate row must not
+        // make the configuration unreachable (getFromDBByCrit() throws on it).
+        $rows = (new self())->find(['entities_id' => $entities_id], 'id ASC', 1);
+        if ($rows !== []) {
+            return reset($rows);
         }
         return false;
     }
@@ -71,7 +69,7 @@ class Entity extends CommonDBTM
     /**
      * If category belong to ancestor, return it
      *
-     * @return array
+     * @return array|false
      */
     public function prepareInputForAdd($input)
     {
@@ -84,6 +82,11 @@ class Entity extends CommonDBTM
             'itilcategories_id',
             'log_type',
         ]));
+
+        // One settings row per entity (also enforced by a unique key)
+        if (countElementsInTable(self::getTable(), ['entities_id' => (int) ($input['entities_id'] ?? 0)]) > 0) {
+            return false;
+        }
 
         return $this->sanitizeCategoryScope($input, (int) ($input['entities_id'] ?? 0));
     }
@@ -232,7 +235,10 @@ class Entity extends CommonDBTM
     public function showFormMcv($item)
     {
         $checkRights = new self();
-        $checkRights->getFromDBByCrit(['entities_id' => $item->getID()]);
+        $config_data = self::getInstance($item->getID());
+        if ($config_data !== false) {
+            $checkRights->getFromDB($config_data['id']);
+        }
 
         $availableCategories = self::availableCategories($item->getID());
 
@@ -253,7 +259,8 @@ class Entity extends CommonDBTM
         TemplateRenderer::getInstance()->display(
             '@transferticketentity/config.html.twig',
             [
-                'can_edit' => Session::haveRightsOr(self::$rightname, [CREATE, UPDATE, PURGE]),
+                // Same right as front/entity.form.php, which receives the form
+                'can_edit' => Session::haveRight(self::$rightname, UPDATE),
                 'item' => $checkRights,
                 'action' => $target,
                 'id' => $checkRights->getID(),
@@ -270,35 +277,6 @@ class Entity extends CommonDBTM
         return true;
     }
 
-    public static function getEntitiesRights()
-    {
-        global $DB;
-
-        // Restrict the returned policy rows to the caller's entity scope (recursive):
-        // without this, any holder of the plugin "use" right could enumerate the
-        // transfer policy of every entity of the instance, including entities outside
-        // their perimeter.
-        $result = $DB->request([
-            'SELECT' => [
-                'entities_id',
-                'allow_entity_only_transfer',
-                'justification_transfer',
-                'allow_transfer',
-                'keep_category',
-            ],
-            'FROM' => self::getTable(),
-            'WHERE' => getEntitiesRestrictCriteria(self::getTable(), 'entities_id', '', true),
-            'ORDER' => ['entities_id ASC'],
-        ]);
-
-        $array = [];
-
-        foreach ($result as $data) {
-            array_push($array, $data);
-        }
-
-        return $array;
-    }
 
     /**
      * Get selected entity rights

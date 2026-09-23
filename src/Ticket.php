@@ -43,16 +43,13 @@ use Group;
 use Group_Ticket;
 use Group_User;
 use Html;
+use Item_Ticket;
 use Session;
 use Ticket_User;
 use ITILFollowup;
 use Planning;
 use TicketTask;
 use TicketTemplateMandatoryField;
-
-if (!defined('GLPI_ROOT')) {
-    die("Sorry. You can't access directly to this file");
-}
 
 class Ticket extends CommonDBTM
 {
@@ -399,6 +396,10 @@ class Ticket extends CommonDBTM
      */
     public function getTabNameForItem(CommonGLPI $item, $withtemplate = 0)
     {
+        // Same plugin-right gate as displayTabContentForItem()
+        if (!Session::haveRight(self::$rightname, READ)) {
+            return '';
+        }
         if ($item->getType() == \Ticket::class
             && $_SESSION['glpiactiveprofile']['interface'] == 'central') {
             return self::createTabEntry(__("Transfer Ticket Entity", "transferticketentity"));
@@ -458,6 +459,39 @@ class Ticket extends CommonDBTM
      *
      * @return void
      */
+    /**
+     * Unlink the associated items (assets...) of a transferred ticket that are not
+     * visible from its new entity, so the target entity does not get access to
+     * items of the source entity.
+     *
+     * @param int $tickets_id
+     * @param int $entities_id Target entity
+     *
+     * @return int Number of unlinked items
+     */
+    private static function unlinkItemsOutsideEntity(int $tickets_id, int $entities_id): int
+    {
+        $ancestors   = getAncestorsOf(\Entity::getTable(), $entities_id);
+        $item_ticket = new Item_Ticket();
+        $unlinked    = 0;
+
+        foreach ($item_ticket->find(['tickets_id' => $tickets_id]) as $link) {
+            $item = getItemForItemtype($link['itemtype']);
+            if (!$item || !$item->getFromDB((int) $link['items_id']) || !$item->isEntityAssign()) {
+                continue;
+            }
+
+            $item_entity = (int) $item->getEntityID();
+            $visible     = $item_entity === $entities_id
+                || ($item->isRecursive() && in_array($item_entity, array_map('intval', $ancestors), true));
+            if (!$visible && $item_ticket->delete(['id' => $link['id']], true)) {
+                $unlinked++;
+            }
+        }
+
+        return $unlinked;
+    }
+
     public function launchTicketTransfer($params)
     {
         global $CFG_GLPI;
@@ -469,9 +503,24 @@ class Ticket extends CommonDBTM
         // the user can access, which closes the cross-entity IDOR reachable through the
         // "bypass" right. This intentionally guards the SOURCE ticket only: a technician is
         // still allowed to transfer INTO a target entity they do not manage (feature intent).
+        // The global ticket UPDATE right is also required, as for the form and the AJAX
+        // endpoints: can() alone lets a requester update their own new ticket.
         $source_ticket = new \Ticket();
-        if (!$source_ticket->can((int) ($params['id_ticket'] ?? 0), UPDATE)) {
+        if (
+            !Session::haveRight('ticket', UPDATE)
+            || !$source_ticket->can((int) ($params['id_ticket'] ?? 0), UPDATE)
+        ) {
             throw new AccessDeniedHttpException();
+        }
+
+        // Replay the form guard: a closed ticket cannot be transferred (it would be reopened)
+        if ($source_ticket->fields['status'] == CommonITILObject::CLOSED) {
+            Session::addMessageAfterRedirect(
+                __("Unauthorized transfer on closed ticket.", "transferticketentity"),
+                true,
+                ERROR,
+            );
+            Html::back();
         }
 
         $checkAssign = self::checkAssign($params);
@@ -639,6 +688,11 @@ class Ticket extends CommonDBTM
 
             $ticket->update($ticket_update);
 
+            $unlinked_items = self::unlinkItemsOutsideEntity(
+                (int) $params['id_ticket'],
+                (int) $params['entity_choice'],
+            );
+
             if ($requiredGroup) {
                 // Change group ticket
                 $group_check = [
@@ -654,16 +708,29 @@ class Ticket extends CommonDBTM
                 }
             }
 
-            $content = __("Transfer to", "transferticketentity") . " $theEntity";
+            // The followup/task content is HTML: escape every external fragment
+            $content = __("Transfer to", "transferticketentity") . " " . htmlescape($theEntity);
 
             if (!empty($params['group_choice']) && $params['group_choice'] > 0) {
                 $group = new Group();
                 $group->getFromDB($params['group_choice']);
-                $content .= " " . __("in the group", "transferticketentity") . " " . $group->getName();
+                $content .= " " . __("in the group", "transferticketentity") . " " . htmlescape($group->getName());
             }
 
             if (!empty($justification)) {
-                $content .= "<br><br>" . $justification;
+                $content .= "<br><br>" . nl2br(htmlescape($justification));
+            }
+
+            if ($unlinked_items > 0) {
+                $content .= "<br><br>" . sprintf(
+                    _n(
+                        '%d associated item not visible from the target entity has been unlinked',
+                        '%d associated items not visible from the target entity have been unlinked',
+                        $unlinked_items,
+                        'transferticketentity',
+                    ),
+                    $unlinked_items,
+                );
             }
 
             // Log the transfer as a followup or task depending on entity configuration
