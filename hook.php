@@ -57,7 +57,7 @@ function plugin_transferticketentity_install()
             `itilcategories_id` INT {$default_key_sign},
             `log_type` TINYINT NOT NULL DEFAULT 0,
             PRIMARY KEY  (`id`),
-            KEY `entities_id` (`entities_id`)
+            UNIQUE KEY `entities_id` (`entities_id`)
             ) ENGINE=InnoDB DEFAULT CHARSET={$default_charset} COLLATE={$default_collation} ROW_FORMAT=DYNAMIC;";
 
         $DB->doQuery($query);
@@ -84,6 +84,27 @@ function plugin_transferticketentity_install()
     if (!$DB->fieldExists('glpi_plugin_transferticketentity_entities_settings', 'log_type')) {
         $DB->doQuery("ALTER TABLE `glpi_plugin_transferticketentity_entities_settings`
             ADD COLUMN `log_type` TINYINT NOT NULL DEFAULT 0");
+    }
+
+    // One settings row per entity: a duplicate made the configuration tab
+    // unreachable (getFromDBByCrit() throws) while transfers stayed allowed.
+    // Keep the oldest row of each entity, then enforce it with a unique key.
+    $settings_table = 'glpi_plugin_transferticketentity_entities_settings';
+    $index_result   = $DB->doQuery(
+        "SHOW INDEX FROM `{$settings_table}` WHERE `Key_name` = 'entities_id' AND `Non_unique` = 1",
+    );
+    if ($index_result && $DB->numrows($index_result) > 0) {
+        $seen_entities = [];
+        foreach ($DB->request(['FROM' => $settings_table, 'ORDER' => 'id ASC']) as $row) {
+            if (isset($seen_entities[$row['entities_id']])) {
+                $DB->delete($settings_table, ['id' => $row['id']]);
+            } else {
+                $seen_entities[$row['entities_id']] = true;
+            }
+        }
+        $DB->doQuery(
+            "ALTER TABLE `{$settings_table}` DROP INDEX `entities_id`, ADD UNIQUE KEY `entities_id` (`entities_id`)",
+        );
     }
 
     return true;
