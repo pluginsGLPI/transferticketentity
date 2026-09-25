@@ -36,6 +36,8 @@ use CommonDBTM;
 use CommonITILActor;
 use CommonITILObject;
 use CommonGLPI;
+use Document;
+use Document_Item;
 use Dropdown;
 use Glpi\Application\View\TemplateRenderer;
 use Glpi\Exception\Http\AccessDeniedHttpException;
@@ -492,6 +494,78 @@ class Ticket extends CommonDBTM
         return $unlinked;
     }
 
+    /**
+     * Handle the documents of a transferred ticket (attached to the ticket or to its
+     * followups, tasks, solutions and validations) that are not visible from its new entity.
+     * The core grants the file download to anyone able to read the ticket
+     * (Document::canViewFileFromItilObject()), whatever the entity of the document.
+     * As the core Transfer does, a document only linked to this ticket follows it to the
+     * target entity; a document shared with other items is unlinked from the ticket.
+     *
+     * @param int $tickets_id
+     * @param int $entities_id Target entity
+     *
+     * @return array{moved: int, unlinked: int}
+     */
+    private static function handleDocumentsOutsideEntity(int $tickets_id, int $entities_id): array
+    {
+        global $DB;
+
+        $result = ['moved' => 0, 'unlinked' => 0];
+        $ticket = new \Ticket();
+        if (!$ticket->getFromDB($tickets_id)) {
+            return $result;
+        }
+
+        $ancestors = array_map('intval', getAncestorsOf(\Entity::getTable(), $entities_id));
+        // Links belonging to the ticket and its sub-items, whatever the rights of the user
+        $ticket_links = [];
+        foreach (
+            $DB->request([
+                'SELECT' => ['id', 'documents_id'],
+                'FROM'   => Document_Item::getTable(),
+                'WHERE'  => [$ticket->getAssociatedDocumentsCriteria(true)],
+            ]) as $link
+        ) {
+            $ticket_links[(int) $link['documents_id']][] = (int) $link['id'];
+        }
+
+        $document      = new Document();
+        $document_item = new Document_Item();
+        foreach ($ticket_links as $documents_id => $links_id) {
+            if (!$document->getFromDB($documents_id)) {
+                continue;
+            }
+            $doc_entity = (int) $document->getEntityID();
+            if ($doc_entity === $entities_id
+                || ($document->isRecursive() && in_array($doc_entity, $ancestors, true))) {
+                continue;
+            }
+
+            $shared = countElementsInTable(Document_Item::getTable(), [
+                'documents_id' => $documents_id,
+                'NOT'          => ['id' => $links_id],
+            ]) > 0;
+
+            if (!$shared) {
+                if ($document->update([
+                    'id'           => $documents_id,
+                    'entities_id'  => $entities_id,
+                    'is_recursive' => 0,
+                ])) {
+                    $result['moved']++;
+                }
+            } else {
+                foreach ($links_id as $link_id) {
+                    $document_item->delete(['id' => $link_id], true);
+                }
+                $result['unlinked']++;
+            }
+        }
+
+        return $result;
+    }
+
     public function launchTicketTransfer($params)
     {
         global $CFG_GLPI;
@@ -692,6 +766,10 @@ class Ticket extends CommonDBTM
                 (int) $params['id_ticket'],
                 (int) $params['entity_choice'],
             );
+            $documents = self::handleDocumentsOutsideEntity(
+                (int) $params['id_ticket'],
+                (int) $params['entity_choice'],
+            );
 
             if ($requiredGroup) {
                 // Change group ticket
@@ -730,6 +808,30 @@ class Ticket extends CommonDBTM
                         'transferticketentity',
                     ),
                     $unlinked_items,
+                );
+            }
+
+            if ($documents['moved'] > 0) {
+                $content .= "<br><br>" . sprintf(
+                    _n(
+                        '%d document has been moved to the target entity',
+                        '%d documents have been moved to the target entity',
+                        $documents['moved'],
+                        'transferticketentity',
+                    ),
+                    $documents['moved'],
+                );
+            }
+
+            if ($documents['unlinked'] > 0) {
+                $content .= "<br><br>" . sprintf(
+                    _n(
+                        '%d document shared with other items and not visible from the target entity has been unlinked',
+                        '%d documents shared with other items and not visible from the target entity have been unlinked',
+                        $documents['unlinked'],
+                        'transferticketentity',
+                    ),
+                    $documents['unlinked'],
                 );
             }
 

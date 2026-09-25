@@ -34,6 +34,9 @@ use GlpiPlugin\Transferticketentity\Entity;
 use GlpiPlugin\Transferticketentity\Ticket;
 
 Session::checkRight("entity", UPDATE);
+// Same gate as the configuration tab (Entity::getTabNameForItem): a profile without the
+// plugin right must not change the transfer policy through a forged POST either.
+Session::checkRight('plugin_transferticketentity_use', READ);
 
 $config = new Entity();
 
