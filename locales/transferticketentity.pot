@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-16 04:21+0000\n"
+"POT-Creation-Date: 2026-09-28 04:51+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -84,44 +84,44 @@ msgstr ""
 msgid "Please select a valid entity"
 msgstr ""
 
-#: src/Ticket.php:150
+#: src/Profile.php:71 src/Ticket.php:407 src/Entity.php:202
+msgid "Transfer Ticket Entity"
+msgstr ""
+
+#: src/Profile.php:120
+msgid "Authorized entity transfer"
+msgstr ""
+
+#: src/Profile.php:127
+msgid ""
+"Transfer authorized without assignment of technician or associated group"
+msgstr ""
+
+#: src/Ticket.php:149
 msgid "You must be assigned to the ticket to be able to transfer it"
 msgstr ""
 
-#: src/Ticket.php:162
+#: src/Ticket.php:161
 msgid ""
 "You don't have right to update tickets. Please contact your administrator."
 msgstr ""
 
-#: src/Ticket.php:172
+#: src/Ticket.php:171
 msgid "No entity available found, transfer impossible."
 msgstr ""
 
-#: src/Ticket.php:183
+#: src/Ticket.php:182 src/Ticket.php:593
 msgid "Unauthorized transfer on closed ticket."
 msgstr ""
 
-#: src/Ticket.php:404 src/Entity.php:199 src/Profile.php:75
-msgid "Transfer Ticket Entity"
-msgstr ""
-
-#: src/Ticket.php:657
+#: src/Ticket.php:790
 msgid "Transfer to"
 msgstr ""
 
-#: src/Ticket.php:662
+#: src/Ticket.php:795
 msgid "in the group"
 msgstr ""
 
-#: src/Ticket.php:708
+#: src/Ticket.php:877
 msgid "Successful transfer for ticket"
-msgstr ""
-
-#: src/Profile.php:124
-msgid "Authorized entity transfer"
-msgstr ""
-
-#: src/Profile.php:131
-msgid ""
-"Transfer authorized without assignment of technician or associated group"
 msgstr ""
