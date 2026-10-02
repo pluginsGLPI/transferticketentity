@@ -96,7 +96,7 @@ msgstr "Veuillez sélectionner un groupe valide"
 #: templates/config.html.twig:142 templates/profile.html.twig:36
 msgctxt "button"
 msgid "Save"
-msgstr "Sauver"
+msgstr "Sauvegarder"
 
 #: templates/ticket.html.twig:106
 msgid "Select the group to assign"
