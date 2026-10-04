@@ -27,20 +27,25 @@
  * --------------------------------------------------------------------------
  */
 
-function see_params(value) {
-    const block = document.getElementById("transfer_params");
-    if (value == 1) {
-        block.classList.remove("d-none");
-    } else {
-        block.classList.add("d-none");
-    }
-}
+// Entity configuration (templates/config.html.twig): the transfer parameters are shown while
+// the transfer is allowed, the default category while the category is not kept. The slider
+// macro of the core has no on_change option, hence the listener on the checkboxes. The tab is
+// loaded over AJAX after this script, so the listener is delegated to the document.
+(function () {
+    const toggles = {
+        allow_transfer: {block: 'transfer_params', show_when: true},
+        keep_category: {block: 'category_block', show_when: false},
+    };
 
-function see_category(value) {
-    const block = document.getElementById("category_block");
-    if (value == 0) {
-        block.classList.remove("d-none");
-    } else {
-        block.classList.add("d-none");
-    }
-}
+    document.addEventListener('change', function (event) {
+        const input = event.target;
+        if (!(input instanceof HTMLInputElement) || input.type !== 'checkbox' || !(input.name in toggles)) {
+            return;
+        }
+        const toggle = toggles[input.name];
+        const block = document.getElementById(toggle.block);
+        if (block !== null) {
+            block.classList.toggle('d-none', input.checked !== toggle.show_when);
+        }
+    });
+})();

@@ -57,6 +57,8 @@ function plugin_init_transferticketentity()
     Plugin::registerClass(Profile::class, ['addtabon' => ['Profile']]);
 
     $PLUGIN_HOOKS[Hooks::ADD_CSS]['transferticketentity'][] = "css/style.css";
+    // Entity configuration tab (templates/config.html.twig): on_change handlers of its sliders
+    $PLUGIN_HOOKS[Hooks::ADD_JAVASCRIPT]['transferticketentity'][] = "scripts/config.js";
 
 }
 

@@ -144,11 +144,7 @@ class Ticket extends CommonDBTM
         $entity->getFromDB($ticket->fields['entities_id']);
         $checkAssign = self::checkAssign($params);
         if (!Session::haveright("plugin_transferticketentity_bypass", READ) && !$checkAssign) {
-            echo "<div class='alert alert-danger'>";
-            echo "<p>" .
-                __("You must be assigned to the ticket to be able to transfer it", "transferticketentity")
-                . "</p>";
-            echo "</div>";
+            self::displayTransferError(__("You must be assigned to the ticket to be able to transfer it", "transferticketentity"));
 
             return false;
         }
@@ -156,32 +152,20 @@ class Ticket extends CommonDBTM
         $getEntitiesRights = self::getEntitiesRights($ticket->fields['entities_id']);
 
         if (!Session::haveRight('ticket', UPDATE)) {
-            echo "<div class='alert alert-danger'>";
-            echo "<p>" .
-                __("You don't have right to update tickets. Please contact your administrator.", "transferticketentity")
-                . "</p>";
-            echo "</div>";
+            self::displayTransferError(__("You don't have right to update tickets. Please contact your administrator.", "transferticketentity"));
 
             return false;
         }
 
         if (count($getEntitiesRights) == 0) {
-            echo "<div class='alert alert-danger'>";
-            echo "<p>" .
-                __("No entity available found, transfer impossible.", "transferticketentity")
-                . "</p>";
-            echo "</div>";
+            self::displayTransferError(__("No entity available found, transfer impossible.", "transferticketentity"));
 
             return false;
         }
 
         // Check if ticket is closed
         if ($ticket->fields['status'] == CommonITILObject::CLOSED) {
-            echo "<div class='alert alert-danger'>";
-            echo "<p>" .
-                __("Unauthorized transfer on closed ticket.", "transferticketentity")
-                . "</p>";
-            echo "</div>";
+            self::displayTransferError(__("Unauthorized transfer on closed ticket.", "transferticketentity"));
 
             return false;
         }
@@ -216,6 +200,16 @@ class Ticket extends CommonDBTM
 
     }
 
+
+    /**
+     * Reason why the ticket cannot be transferred, in place of the transfer form
+     */
+    private static function displayTransferError(string $message): void
+    {
+        TemplateRenderer::getInstance()->display('@transferticketentity/transfer_error.html.twig', [
+            'message' => $message,
+        ]);
+    }
 
     /**
      * Checks that the technician or his group is assigned to the ticket
@@ -568,7 +562,7 @@ class Ticket extends CommonDBTM
 
     public function launchTicketTransfer($params)
     {
-        global $CFG_GLPI;
+        global $CFG_GLPI, $DB;
 
         // Enforce the real UPDATE authorization on the SOURCE ticket before any write.
         // The plugin READ right and checkAssign() alone are not enough to gate a mutation
@@ -607,15 +601,19 @@ class Ticket extends CommonDBTM
 
         $checkMandatoryCategory = self::checkMandatoryCategory($params);
 
-        $justification = $params['justification'];
+        // Posted values, cast once: the guards below compare int values, so the raw strings
+        // must never reach a write ("5abc" passes an int comparison)
+        $tickets_id    = (int) $params['id_ticket'];
+        $entities_id   = (int) ($params['entity_choice'] ?? 0);
+        $groups_id     = (int) ($params['group_choice'] ?? 0);
+        $justification = (string) ($params['justification'] ?? '');
         $requiredGroup = true;
 
         $entity = new \Entity();
-        $entity->getfromDB($params['entity_choice']);
+        $entity->getfromDB($entities_id);
         $theEntity = $entity->getName();
 
-        if (!isset($params['justification'])
-            || $params['justification'] == '') {
+        if ($justification === '') {
             if ($checkEntityRight['justification_transfer'] == 1) {
                 Session::addMessageAfterRedirect(
                     __(
@@ -632,7 +630,7 @@ class Ticket extends CommonDBTM
             }
         }
 
-        if (empty($params['group_choice'])
+        if ($groups_id <= 0
             && $checkEntityRight['allow_entity_only_transfer'] == 1) {
             Session::addMessageAfterRedirect(
                 __(
@@ -644,7 +642,7 @@ class Ticket extends CommonDBTM
             );
 
             Html::back();
-        } elseif (empty($params['group_choice'])
+        } elseif ($groups_id <= 0
             && $checkEntityRight['allow_entity_only_transfer'] == 0) {
             $requiredGroup = false;
         }
@@ -661,7 +659,10 @@ class Ticket extends CommonDBTM
             );
 
             Html::back();
-        } elseif (!in_array((int) $params['entity_choice'], array_map('intval', $checkEntity), true)) {
+        } elseif ($entities_id === (int) $source_ticket->fields['entities_id']
+            || !in_array($entities_id, array_map('intval', $checkEntity), true)) {
+            // The current entity of the ticket is not a target: the transfer would only
+            // remove its assignees and set it back to new
             // Check that the selected entity belongs to those available (strict, int-cast
             // comparison mirrors the AJAX endpoints so a "1abc"-style POST cannot match).
             Session::addMessageAfterRedirect(
@@ -674,8 +675,8 @@ class Ticket extends CommonDBTM
             );
 
             Html::back();
-        } elseif (!empty($params['group_choice'])
-            && !in_array((int) $params['group_choice'], array_map('intval', $checkGroup), true)) {
+        } elseif ($groups_id > 0
+            && !in_array($groups_id, array_map('intval', $checkGroup), true)) {
             Session::addMessageAfterRedirect(
                 __(
                     "Please select a valid group",
@@ -691,11 +692,11 @@ class Ticket extends CommonDBTM
             $ticket = new \Ticket();
 
             $ticket_update = [
-                'id' => $params['id_ticket'],
-                'entities_id' => $params['entity_choice'],
+                'id' => $tickets_id,
+                'entities_id' => $entities_id,
             ];
 
-            if (!empty($params['group_choice']) && $params['group_choice'] > 0) {
+            if ($groups_id > 0) {
                 $ticket_status = ['status' => CommonITILObject::ASSIGNED];
                 $ticket_update = array_merge($ticket_update, $ticket_status);
             } else {
@@ -707,7 +708,7 @@ class Ticket extends CommonDBTM
                 if ($checkExistingCategory) {
                     // Explicitly include the current category so GLPI does not reset it on entity change
                     $currentTicket = new \Ticket();
-                    $currentTicket->getFromDB($params['id_ticket']);
+                    $currentTicket->getFromDB($tickets_id);
                     $ticket_category = ['itilcategories_id' => $currentTicket->fields['itilcategories_id']];
                 } else {
                     $ticket_category = ['itilcategories_id' => 0];
@@ -732,66 +733,65 @@ class Ticket extends CommonDBTM
                 Html::back();
             }
 
-            // Remove the link with the current user
-            $delete_link_user = [
-                'tickets_id' => $params['id_ticket'],
-                'type' => CommonITILActor::ASSIGN,
-            ];
-
-            $ticket_user = new Ticket_User();
-            $found_user = $ticket_user->find($delete_link_user);
-
-            foreach ($found_user as $id => $tu) {
-                //delete user
-                $ticket_user->delete(['id' => $id]);
+            // All or nothing: the ticket is moved first, and only once the core accepted it
+            // are its assignees, items and documents changed. A refused update (mandatory
+            // field of the template, plugin hook) used to leave the ticket in its entity
+            // without any assignee.
+            $DB->beginTransaction();
+            $moved = false;
+            try {
+                $moved = $ticket->update($ticket_update)
+                    && (int) $ticket->fields['entities_id'] === $entities_id;
+            } catch (\Throwable $e) {
+                $DB->rollBack();
+                throw $e;
+            }
+            if (!$moved) {
+                $DB->rollBack();
+                Session::addMessageAfterRedirect(
+                    __("The ticket could not be transferred.", 'transferticketentity'),
+                    true,
+                    ERROR,
+                );
+                Html::back();
             }
 
-            // Remove the link with the current group
-            $delete_link_group = [
-                'tickets_id' => $params['id_ticket'],
-                'type' => CommonITILActor::ASSIGN,
-            ];
-
-            $group_ticket = new Group_Ticket();
-            $found_group = $group_ticket->find($delete_link_group);
-
-            foreach ($found_group as $id => $tu) {
-                //delete group
-                $group_ticket->delete(['id' => $id]);
-            }
-
-            $ticket->update($ticket_update);
-
-            $unlinked_items = self::unlinkItemsOutsideEntity(
-                (int) $params['id_ticket'],
-                (int) $params['entity_choice'],
-            );
-            $documents = self::handleDocumentsOutsideEntity(
-                (int) $params['id_ticket'],
-                (int) $params['entity_choice'],
-            );
-
-            if ($requiredGroup) {
-                // Change group ticket
-                $group_check = [
-                    'tickets_id' => $params['id_ticket'],
-                    'groups_id' => $params['group_choice'],
-                    'type' => CommonITILActor::ASSIGN,
-                ];
-
-                if (!$group_ticket->find($group_check)) {
-                    $group_ticket->add($group_check);
-                } else {
-                    $group_ticket->update($group_check);
+            try {
+                // Remove the assigned technicians and groups
+                $ticket_user = new Ticket_User();
+                foreach ($ticket_user->find(['tickets_id' => $tickets_id, 'type' => CommonITILActor::ASSIGN]) as $id => $tu) {
+                    $ticket_user->delete(['id' => $id]);
                 }
+
+                $group_ticket = new Group_Ticket();
+                foreach ($group_ticket->find(['tickets_id' => $tickets_id, 'type' => CommonITILActor::ASSIGN]) as $id => $gt) {
+                    $group_ticket->delete(['id' => $id]);
+                }
+
+                $unlinked_items = self::unlinkItemsOutsideEntity($tickets_id, $entities_id);
+                $documents      = self::handleDocumentsOutsideEntity($tickets_id, $entities_id);
+
+                // The assignments were all removed above: the chosen group is always added
+                if ($requiredGroup) {
+                    $group_ticket->add([
+                        'tickets_id' => $tickets_id,
+                        'groups_id'  => $groups_id,
+                        'type'       => CommonITILActor::ASSIGN,
+                    ]);
+                }
+
+                $DB->commit();
+            } catch (\Throwable $e) {
+                $DB->rollBack();
+                throw $e;
             }
 
             // The followup/task content is HTML: escape every external fragment
             $content = __("Transfer to", "transferticketentity") . " " . htmlescape($theEntity);
 
-            if (!empty($params['group_choice']) && $params['group_choice'] > 0) {
+            if ($groups_id > 0) {
                 $group = new Group();
-                $group->getFromDB($params['group_choice']);
+                $group->getFromDB($groups_id);
                 $content .= " " . __("in the group", "transferticketentity") . " " . htmlescape($group->getName());
             }
 
@@ -839,7 +839,7 @@ class Ticket extends CommonDBTM
             if (($checkEntityRight['log_type'] ?? 0) == 1) {
                 $task = new TicketTask();
                 $task->add([
-                    'tickets_id' => $params['id_ticket'],
+                    'tickets_id' => $tickets_id,
                     'is_private' => true,
                     'state'      => Planning::INFO,
                     'content'    => $content,
@@ -848,14 +848,14 @@ class Ticket extends CommonDBTM
                 $followup = new ITILFollowup();
                 $followup->add([
                     'itemtype'  => \Ticket::class,
-                    'items_id'  => $params['id_ticket'],
+                    'items_id'  => $tickets_id,
                     'is_private' => true,
                     'content'   => $content,
                 ]);
             }
 
             $ticket = new \Ticket();
-            $ticket->getFromDB($params['id_ticket']);
+            $ticket->getFromDB($tickets_id);
 
             if ($ticket->can($ticket->getID(), READ)) {
                 Session::addMessageAfterRedirect(

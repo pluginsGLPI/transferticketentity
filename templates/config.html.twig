@@ -49,10 +49,7 @@
                         'allow_transfer',
                         item.fields['allow_transfer'],
                         __('Allow Transfer function', 'transferticketentity'),
-                        field_options|merge({
-                            'entity': params['entities_id'],
-                            'on_change' : 'see_params(this.value);'
-                        })
+                        field_options
                     ) }}
                 </div>
 
@@ -79,10 +76,7 @@
                             'keep_category',
                             item.fields['keep_category']|default(1),
                             __('Keep category after transfer', 'transferticketentity'),
-                            field_options|merge({
-                                'entity': params['entities_id'],
-                                'on_change' : 'see_category(this.value);'
-                            })
+                            field_options
                         ) }}
 
                         <div class='form-field row col-6 col-sm-6 mb-2'>
@@ -145,5 +139,4 @@
             </div>
         </div>
     </form>
-    <script src="{{ config('root_doc') }}/plugins/transferticketentity/js/config.js"></script>
 {% endif %}
