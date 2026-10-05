@@ -72,13 +72,12 @@ function plugin_transferticketentity_install()
            AND `TABLE_NAME` = 'glpi_plugin_transferticketentity_entities_settings'
            AND `REFERENCED_TABLE_NAME` IS NOT NULL",
     );
-    if ($fk_result) {
-        while ($fk_row = $DB->fetchAssoc($fk_result)) {
-            $DB->doQuery(
-                "ALTER TABLE `glpi_plugin_transferticketentity_entities_settings`
-                 DROP FOREIGN KEY `{$fk_row['CONSTRAINT_NAME']}`",
-            );
-        }
+    // doQuery() throws on failure in GLPI 12, so the result is always a valid set here
+    while ($fk_row = $DB->fetchAssoc($fk_result)) {
+        $DB->doQuery(
+            "ALTER TABLE `glpi_plugin_transferticketentity_entities_settings`
+             DROP FOREIGN KEY `{$fk_row['CONSTRAINT_NAME']}`",
+        );
     }
 
     if (!$DB->fieldExists('glpi_plugin_transferticketentity_entities_settings', 'log_type')) {
@@ -93,7 +92,7 @@ function plugin_transferticketentity_install()
     $index_result   = $DB->doQuery(
         "SHOW INDEX FROM `{$settings_table}` WHERE `Key_name` = 'entities_id' AND `Non_unique` = 1",
     );
-    if ($index_result && $DB->numrows($index_result) > 0) {
+    if ($DB->numrows($index_result) > 0) {
         $seen_entities = [];
         foreach ($DB->request(['FROM' => $settings_table, 'ORDER' => 'id ASC']) as $row) {
             if (isset($seen_entities[$row['entities_id']])) {

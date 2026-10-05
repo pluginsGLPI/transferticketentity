@@ -40,7 +40,7 @@ use Session;
 
 class Entity extends CommonDBTM
 {
-    public static $rightname = "entity";
+    public static string $rightname = "entity";
 
     public static function getTable($classname = null)
     {
@@ -195,7 +195,7 @@ class Entity extends CommonDBTM
         // Gate the transfer-policy tab on the dedicated plugin right, not just native
         // "entity" READ: the transfer configuration should only be visible to profiles
         // actually provisioned for this plugin.
-        if (!Session::haveRight('plugin_transferticketentity_use', READ)) {
+        if (!Session::haveRight(Ticket::$rightname, READ)) {
             return '';
         }
         if ($item->getType() == \Entity::class) {
@@ -216,7 +216,7 @@ class Entity extends CommonDBTM
     {
         // Same plugin-right gate as getTabNameForItem: never render the transfer policy
         // to a profile that only holds native "entity" READ without the plugin right.
-        if (!Session::haveRight('plugin_transferticketentity_use', READ)) {
+        if (!Session::haveRight(Ticket::$rightname, READ)) {
             return true;
         }
         if ($item->getType() == \Entity::class) {

@@ -55,7 +55,7 @@ use TicketTemplateMandatoryField;
 
 class Ticket extends CommonDBTM
 {
-    public static $rightname = "plugin_transferticketentity_use";
+    public static string $rightname = "plugin_transferticketentity_use";
 
 
     /**
@@ -151,7 +151,7 @@ class Ticket extends CommonDBTM
 
         $getEntitiesRights = self::getEntitiesRights($ticket->fields['entities_id']);
 
-        if (!Session::haveRight('ticket', UPDATE)) {
+        if (!Session::haveRight(\Ticket::$rightname, UPDATE)) {
             self::displayTransferError(__("You don't have right to update tickets. Please contact your administrator.", "transferticketentity"));
 
             return false;
@@ -575,7 +575,7 @@ class Ticket extends CommonDBTM
         // endpoints: can() alone lets a requester update their own new ticket.
         $source_ticket = new \Ticket();
         if (
-            !Session::haveRight('ticket', UPDATE)
+            !Session::haveRight(\Ticket::$rightname, UPDATE)
             || !$source_ticket->can((int) ($params['id_ticket'] ?? 0), UPDATE)
         ) {
             throw new AccessDeniedHttpException();

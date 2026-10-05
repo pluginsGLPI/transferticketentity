@@ -31,7 +31,7 @@
 
 use GlpiPlugin\Transferticketentity\Ticket;
 
-Session::checkRight("plugin_transferticketentity_use", READ);
+Session::checkRight(Ticket::$rightname, READ);
 
 $ticket = new Ticket();
 

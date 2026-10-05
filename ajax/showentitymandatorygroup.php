@@ -33,12 +33,12 @@ use Glpi\Exception\Http\AccessDeniedHttpException;
 use GlpiPlugin\Transferticketentity\Entity;
 use GlpiPlugin\Transferticketentity\Ticket;
 
-Session::checkRight('plugin_transferticketentity_use', READ);
+Session::checkRight(Ticket::$rightname, READ);
 // This endpoint only feeds the transfer form, whose display and submission both
 // require `ticket` UPDATE (see Ticket::showFormMcv / launchTicketTransfer). Gate
 // the AJAX surface on the same capability so a profile holding only the plugin
 // READ right cannot enumerate target-entity groups and mandatory-policy flags.
-Session::checkRight('ticket', UPDATE);
+Session::checkRight(\Ticket::$rightname, UPDATE);
 
 if (strpos($_SERVER['PHP_SELF'], "showentitymandatorygroup.php")) {
     header("Content-Type: text/html; charset=UTF-8");

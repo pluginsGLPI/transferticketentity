@@ -44,7 +44,7 @@ use Session;
  */
 class Profile extends \Profile
 {
-    public static $rightname = "profile";
+    public static string $rightname = "profile";
 
     /**
      * @return string

@@ -73,8 +73,8 @@ function plugin_version_transferticketentity()
         'homepage'       => 'https://github.com/InfotelGLPI/transferticketentity',
         'requirements'   => [
             'glpi' => [
-                'min' => '11.0',
-                'max' => '12.0',
+                'min' => '11.0.99',
+                'max' => '12.0.99',
                 'dev' => false,
             ],
         ]];
