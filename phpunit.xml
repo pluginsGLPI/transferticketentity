@@ -1,7 +1,0 @@
-<phpunit bootstrap="tests/bootstrap.php" colors="true" testdox="true">
-   <testsuites>
-      <testsuite name="Unit">
-         <!-- Pure PHP unit tests (no GLPI DB or constants needed) -->
-      </testsuite>
-   </testsuites>
-</phpunit>
