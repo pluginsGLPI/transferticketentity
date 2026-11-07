@@ -1,0 +1,134 @@
+# German translations for the Transfer Ticket Entity plugin.
+#
+# Translators:
+# andyman2311, 2026
+# Codex, 2026
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: transferticketentity\n"
+"POT-Creation-Date: 2026-09-28 04:51+0000\n"
+"PO-Revision-Date: 2026-11-07 00:00+0100\n"
+"Language: de_DE\n"
+"Language-Team: German\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: templates/config.html.twig
+msgid "Settings Transfer Ticket Entity"
+msgstr "Einstellungen für Ticket-Übertragung zwischen Einheiten"
+
+#: templates/config.html.twig
+msgid "Allow Transfer function"
+msgstr "Übertragen von Tickets gestatten"
+
+#: templates/config.html.twig
+msgid "Assigned group required"
+msgstr "Zugewiesene Gruppe erforderlich"
+
+#: templates/config.html.twig
+msgid "Justification required"
+msgstr "Transfergrund erforderlich"
+
+#: templates/config.html.twig
+msgid "Keep category after transfer"
+msgstr "Kategorie nach der Übertragung beibehalten"
+
+#: templates/config.html.twig
+msgid "Transfer log type"
+msgstr "Typ des Übertragungsprotokolls"
+
+#: templates/config.html.twig
+msgid "Default category"
+msgstr "Standardkategorie"
+
+#: templates/config.html.twig
+msgid "The category is mandatory in the ticket template assigned to the entity"
+msgstr "Die Kategorie ist in der der Einheit zugewiesenen Ticketvorlage erforderlich"
+
+#: templates/ticket.html.twig
+msgid "Transfer the ticket"
+msgstr "Ticket übertragen"
+
+#: templates/ticket.html.twig
+msgid ""
+"Once the transfer has been completed, the ticket will remain visible only if "
+"you have the required rights."
+msgstr ""
+"Nach Abschluss der Übertragung bleibt das Ticket nur sichtbar, wenn Sie in "
+"der Zieleinheit über die erforderlichen Berechtigungen verfügen."
+
+#: templates/ticket.html.twig
+msgid "Select ticket entity to transfer"
+msgstr "Zieleinheit für die Ticketübertragung auswählen"
+
+#: templates/ticket.html.twig
+msgid "Select the group to assign"
+msgstr "Zuzuweisende Gruppe auswählen"
+
+#: templates/ticket.html.twig
+msgid "Justification"
+msgstr "Begründung"
+
+#: templates/ticket.html.twig
+msgid ""
+"Warning, category will be reset if it does not exist in the target entity."
+msgstr ""
+"Warnung: Die Kategorie wird zurückgesetzt, wenn sie in der Zieleinheit nicht "
+"vorhanden ist."
+
+#: templates/ticket.html.twig
+msgid "Confirm"
+msgstr "Bestätigen"
+
+#: front/ticket.form.php:43
+msgid "Please select a valid entity"
+msgstr "Bitte wählen Sie eine gültige Einheit aus"
+
+#: src/Profile.php:71 src/Ticket.php:407 src/Entity.php:202
+msgid "Transfer Ticket Entity"
+msgstr "Ticket transferieren"
+
+#: src/Profile.php:120
+msgid "Authorized entity transfer"
+msgstr "Autorisierte Übertragung zwischen Einheiten"
+
+#: src/Profile.php:127
+msgid ""
+"Transfer authorized without assignment of technician or associated group"
+msgstr ""
+"Übertragung ohne Zuweisung eines Technikers oder einer zugehörigen Gruppe "
+"autorisiert"
+
+#: src/Ticket.php:149
+msgid "You must be assigned to the ticket to be able to transfer it"
+msgstr "Sie müssen dem Ticket zugewiesen sein, um es übertragen zu können"
+
+#: src/Ticket.php:161
+msgid ""
+"You don't have right to update tickets. Please contact your administrator."
+msgstr ""
+"Sie haben keine Berechtigung, Tickets zu aktualisieren. Bitte wenden Sie sich "
+"an Ihre Administration."
+
+#: src/Ticket.php:171
+msgid "No entity available found, transfer impossible."
+msgstr "Keine verfügbare Einheit gefunden; Übertragung nicht möglich."
+
+#: src/Ticket.php:182 src/Ticket.php:593
+msgid "Unauthorized transfer on closed ticket."
+msgstr "Unzulässige Übertragung eines geschlossenen Tickets."
+
+#: src/Ticket.php:790
+msgid "Transfer to"
+msgstr "Übertragen nach"
+
+#: src/Ticket.php:795
+msgid "in the group"
+msgstr "in die Gruppe"
+
+#: src/Ticket.php:877
+msgid "Successful transfer for ticket"
+msgstr "Ticket erfolgreich übertragen"
